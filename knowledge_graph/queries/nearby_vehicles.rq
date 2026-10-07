@@ -1,0 +1,2 @@
+PREFIX k: <https://sumo-kars.local/traffic#>
+SELECT ?vehicle ?x ?v WHERE { k:ego k:x ?ex . ?vehicle a k:Vehicle; k:x ?x; k:hasSpeed ?v . FILTER (?vehicle != k:ego && ABS(?x-?ex)<100) }

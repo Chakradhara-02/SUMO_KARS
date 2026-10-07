@@ -1,0 +1,14 @@
+sumo_env/
+.venv/
+__pycache__/
+.pytest_cache/
+outputs/
+docs/.build/
+
+sumo_env/
+outputs/
+__pycache__/
+.pytest_cache/
+.chart-data-*/
+docs/.build/
+.env

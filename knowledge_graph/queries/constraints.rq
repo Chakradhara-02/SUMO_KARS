@@ -1,0 +1,5 @@
+PREFIX k: <https://sumo-kars.local/traffic#>
+SELECT ?kind ?start ?end ?lane ?speed ?begin ?finish ?source WHERE {
+  ?c a k:Constraint; k:kind ?kind; k:start ?start; k:end ?end;
+     k:lane ?lane; k:speed ?speed; k:begin ?begin; k:finish ?finish; k:source ?source.
+}

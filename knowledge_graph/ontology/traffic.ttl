@@ -1,0 +1,42 @@
+@prefix k: <https://sumo-kars.local/traffic#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+k:TrafficOntology a owl:Ontology .
+k:Vehicle a owl:Class .
+k:EgoVehicle a owl:Class; rdfs:subClassOf k:Vehicle .
+k:Road a owl:Class .
+k:Lane a owl:Class .
+k:LaneSlice a owl:Class .
+k:TrafficLight a owl:Class .
+k:TrafficSignal a owl:Class .
+k:Intersection a owl:Class .
+k:SpeedLimitZone a owl:Class .
+k:RoadBlock a owl:Class .
+k:ConstructionZone a owl:Class; rdfs:subClassOf k:RoadBlock .
+k:PedCrossing a owl:Class .
+k:LaneMarking a owl:Class .
+k:Constraint a owl:Class .
+k:locatedAt a owl:ObjectProperty .
+k:hasNextLane a owl:ObjectProperty .
+k:hasPreviousLane a owl:ObjectProperty .
+k:hasLeftLane a owl:ObjectProperty .
+k:hasRightLane a owl:ObjectProperty .
+k:isOn a owl:ObjectProperty .
+k:controlledBy a owl:ObjectProperty .
+k:controls a owl:ObjectProperty .
+k:hasSpeed a owl:DatatypeProperty .
+k:hasShape a owl:DatatypeProperty .
+k:hasCurrentColor a owl:DatatypeProperty .
+k:hasFutureColor a owl:DatatypeProperty .
+k:hasSpeedLimit a owl:DatatypeProperty .
+k:hasType a owl:DatatypeProperty .
+k:main a k:Road .
+k:lane0 a k:Lane; k:isOn k:main; k:hasLeftLane k:lane1; k:hasSpeedLimit 16.0 .
+k:lane1 a k:Lane; k:isOn k:main; k:hasLeftLane k:lane2; k:hasRightLane k:lane0; k:hasSpeedLimit 16.0 .
+k:lane2 a k:Lane; k:isOn k:main; k:hasRightLane k:lane1; k:hasSpeedLimit 16.0 .
+k:junction a k:Intersection; k:controlledBy k:signal .
+k:signal a k:TrafficLight; k:controls k:junction .
+k:workzone a k:ConstructionZone; k:hasShape "lane 0, x=280..315 m" .
+k:crossing a k:PedCrossing; k:hasShape "x=420..450 m; simulated advisory region" .
+k:speedzone a k:SpeedLimitZone; k:hasShape "x=650..800 m"; k:hasSpeedLimit 8.0 .
+k:solid a k:LaneMarking; k:hasType "solid"; k:hasShape "x=80..140 m" .

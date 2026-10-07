@@ -1,0 +1,2 @@
+PREFIX k: <https://sumo-kars.local/traffic#>
+SELECT ?signal ?color WHERE { k:ego k:traffic_light ?signal; k:traffic_light_state ?color . }

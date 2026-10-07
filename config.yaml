@@ -1,0 +1,30 @@
+dt: 1.0
+simulation_dt: 0.2
+horizon: 5
+max_acceleration: 2.0
+min_acceleration: -4.0
+max_speed: 16.0
+min_speed: 0.0
+position_grid: 2.0
+velocity_grid: 1.0
+max_states: 180
+lanes: 3
+lane_width: 3.2
+safety_gap: 8.0
+vehicle_length: 5.0
+uncertainty_growth: 2.0
+stale_timeout: 3.0
+duration: 200
+delay: 1.0
+packet_loss: 0.15
+delay_jitter: 0.0
+sensor_range: 120.0
+lane_change_duration: 2.5
+realtime_factor: 0.0
+outage_begin: 30.0
+outage_end: 30.0
+weights:
+  center: 0.1
+  efficiency: 1.0
+  stability: 0.2
+  lane_change: 2.0

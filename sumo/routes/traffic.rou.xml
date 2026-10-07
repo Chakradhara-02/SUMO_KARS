@@ -1,0 +1,9 @@
+<routes>
+  <vType id="car" accel="2" decel="4" emergencyDecel="8" sigma="0" length="5" minGap="2.5" maxSpeed="16" speedFactor="1"/>
+  <route id="main" edges="in out"/>
+  <route id="cross" edges="cross_in cross_out"/>
+  <vehicle id="lead" type="car" route="main" depart="0" departLane="1" departPos="100" departSpeed="9"/>
+  <vehicle id="ego" type="car" route="main" depart="0" departLane="1" departPos="10" departSpeed="8" color="0,0.8,1"/>
+  <flow id="traffic" type="car" route="main" begin="2" end="90" period="9" departLane="random" departSpeed="8"/>
+  <flow id="cross_traffic" type="car" route="cross" begin="3" end="100" period="12" departSpeed="5"/>
+</routes>

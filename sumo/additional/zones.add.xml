@@ -1,0 +1,5 @@
+<additional>
+  <poly id="construction" type="construction" color="1,0.5,0" fill="true" layer="3" shape="280,-9.6 315,-9.6 315,-6.4 280,-6.4"/>
+  <poly id="speed_zone" type="speed_limit" color="0.3,0.8,0.3,0.25" fill="true" layer="-1" shape="650,-9.6 800,-9.6 800,0 650,0"/>
+  <poly id="crossing_advisory" type="crossing" color="1,1,0,0.3" fill="true" layer="-1" shape="420,-9.6 450,-9.6 450,0 420,0"/>
+</additional>

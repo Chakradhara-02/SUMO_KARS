@@ -1,0 +1,2 @@
+PREFIX k: <https://sumo-kars.local/traffic#>
+SELECT ?source ?start ?end WHERE { k:ego k:x ?x . ?c a k:Constraint; k:kind ?kind; k:source ?source; k:start ?start; k:end ?end . FILTER (?start > ?x && (?kind="spatial" || ?kind="spatial_temporal")) }

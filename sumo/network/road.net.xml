@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- generated on 2026-10-07T10:41:27.920839+05:30 by Eclipse SUMO netconvert 1.27.1
+<netconvertConfiguration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/netconvertConfiguration.xsd">
+
+    <input>
+        <node-files value="D:\SUMO_MP\SUMO_KARS\sumo\network\nodes.nod.xml"/>
+        <edge-files value="D:\SUMO_MP\SUMO_KARS\sumo\network\edges.edg.xml"/>
+    </input>
+
+    <output>
+        <output-file value="D:\SUMO_MP\SUMO_KARS\sumo\network\road.net.xml"/>
+    </output>
+
+    <processing>
+        <offset.disable-normalization value="true"/>
+    </processing>
+
+    <junctions>
+        <no-turnarounds value="true"/>
+    </junctions>
+
+</netconvertConfiguration>
+-->
+
+<net version="1.20" junctionCornerDetail="5" limitTurnSpeed="5.50" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/net_file.xsd">
+
+    <location netOffset="0.00,0.00" convBoundary="0.00,-180.00,1000.00,180.00" origBoundary="0.00,-180.00,1000.00,180.00" projParameter="!"/>
+
+    <edge id=":center_0" function="internal">
+        <lane id=":center_0_0" index="0" speed="6.51" length="9.03" shape="501.60,-13.60 501.95,-11.15 503.00,-9.40 504.75,-8.35 507.20,-8.00"/>
+    </edge>
+    <edge id=":center_1" function="internal">
+        <lane id=":center_1_0" index="0" speed="10.00" length="17.60" shape="501.60,-13.60 501.60,4.00"/>
+    </edge>
+    <edge id=":center_2" function="internal">
+        <lane id=":center_2_0" index="0" speed="16.00" length="11.20" shape="496.00,-8.00 507.20,-8.00"/>
+        <lane id=":center_2_1" index="1" speed="16.00" length="11.20" shape="496.00,-4.80 507.20,-4.80"/>
+        <lane id=":center_2_2" index="2" speed="16.00" length="11.20" shape="496.00,-1.60 507.20,-1.60"/>
+    </edge>
+    <edge id=":center_5" function="internal">
+        <lane id=":center_5_0" index="0" speed="6.51" length="9.03" shape="496.00,-1.60 498.45,-1.25 500.20,-0.20 501.25,1.55 501.60,4.00"/>
+    </edge>
+
+    <edge id="cross_in" from="south" to="center" priority="-1">
+        <lane id="cross_in_0" index="0" speed="10.00" length="166.40" shape="501.60,-180.00 501.60,-13.60"/>
+    </edge>
+    <edge id="cross_out" from="center" to="north" priority="-1">
+        <lane id="cross_out_0" index="0" speed="10.00" length="176.00" shape="501.60,4.00 501.60,180.00"/>
+    </edge>
+    <edge id="in" from="west" to="center" priority="-1">
+        <lane id="in_0" index="0" speed="16.00" length="496.00" shape="0.00,-8.00 496.00,-8.00"/>
+        <lane id="in_1" index="1" speed="16.00" length="496.00" shape="0.00,-4.80 496.00,-4.80"/>
+        <lane id="in_2" index="2" speed="16.00" length="496.00" shape="0.00,-1.60 496.00,-1.60"/>
+    </edge>
+    <edge id="out" from="center" to="east" priority="-1">
+        <lane id="out_0" index="0" speed="16.00" length="492.80" shape="507.20,-8.00 1000.00,-8.00"/>
+        <lane id="out_1" index="1" speed="16.00" length="492.80" shape="507.20,-4.80 1000.00,-4.80"/>
+        <lane id="out_2" index="2" speed="16.00" length="492.80" shape="507.20,-1.60 1000.00,-1.60"/>
+    </edge>
+
+    <tlLogic id="center" type="static" programID="0" offset="0">
+        <phase duration="42" state="GGrrrr"/>
+        <phase duration="3"  state="yyrrrr"/>
+        <phase duration="42" state="rrGGGG"/>
+        <phase duration="3"  state="rryyyy"/>
+    </tlLogic>
+
+    <junction id="center" type="traffic_light" x="500.00" y="0.00" incLanes="cross_in_0 in_0 in_1 in_2" intLanes=":center_0_0 :center_1_0 :center_2_0 :center_2_1 :center_2_2 :center_5_0" shape="500.00,4.00 503.20,4.00 503.64,1.78 504.20,1.00 504.98,0.44 505.98,0.11 507.20,0.00 507.20,-9.60 504.98,-10.04 504.20,-10.60 503.64,-11.38 503.31,-12.38 503.20,-13.60 500.00,-13.60 499.56,-11.38 499.00,-10.60 498.22,-10.04 497.22,-9.71 496.00,-9.60 496.00,0.00 498.22,0.44 499.00,1.00 499.56,1.78 499.89,2.78">
+        <request index="0" response="011100" foes="011100" cont="0"/>
+        <request index="1" response="111100" foes="111100" cont="0"/>
+        <request index="2" response="000000" foes="000011" cont="0"/>
+        <request index="3" response="000000" foes="000011" cont="0"/>
+        <request index="4" response="000000" foes="000011" cont="0"/>
+        <request index="5" response="000000" foes="000010" cont="0"/>
+    </junction>
+    <junction id="east" type="dead_end" x="1000.00" y="0.00" incLanes="out_0 out_1 out_2" intLanes="" shape="1000.00,-9.60 1000.00,0.00"/>
+    <junction id="north" type="dead_end" x="500.00" y="180.00" incLanes="cross_out_0" intLanes="" shape="503.20,180.00 500.00,180.00"/>
+    <junction id="south" type="dead_end" x="500.00" y="-180.00" incLanes="" intLanes="" shape="500.00,-180.00 503.20,-180.00"/>
+    <junction id="west" type="dead_end" x="0.00" y="0.00" incLanes="" intLanes="" shape="0.00,0.00 0.00,-9.60"/>
+
+    <connection from="cross_in" to="out" fromLane="0" toLane="0" via=":center_0_0" tl="center" linkIndex="0" dir="r" state="o"/>
+    <connection from="cross_in" to="cross_out" fromLane="0" toLane="0" via=":center_1_0" tl="center" linkIndex="1" dir="s" state="o"/>
+    <connection from="in" to="out" fromLane="0" toLane="0" via=":center_2_0" tl="center" linkIndex="2" dir="s" state="O"/>
+    <connection from="in" to="out" fromLane="1" toLane="1" via=":center_2_1" tl="center" linkIndex="3" dir="s" state="O"/>
+    <connection from="in" to="out" fromLane="2" toLane="2" via=":center_2_2" tl="center" linkIndex="4" dir="s" state="O"/>
+    <connection from="in" to="cross_out" fromLane="2" toLane="0" via=":center_5_0" tl="center" linkIndex="5" dir="l" state="O"/>
+
+    <connection from=":center_0" to="out" fromLane="0" toLane="0" dir="r" state="M"/>
+    <connection from=":center_1" to="cross_out" fromLane="0" toLane="0" dir="s" state="M"/>
+    <connection from=":center_2" to="out" fromLane="0" toLane="0" dir="s" state="M"/>
+    <connection from=":center_2" to="out" fromLane="1" toLane="1" dir="s" state="M"/>
+    <connection from=":center_2" to="out" fromLane="2" toLane="2" dir="s" state="M"/>
+    <connection from=":center_5" to="cross_out" fromLane="0" toLane="0" dir="l" state="M"/>
+
+</net>

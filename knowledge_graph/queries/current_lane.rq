@@ -1,0 +1,2 @@
+PREFIX k: <https://sumo-kars.local/traffic#>
+SELECT ?lane WHERE { k:ego k:locatedAt ?lane . }

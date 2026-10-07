@@ -1,0 +1,2 @@
+PREFIX k: <https://sumo-kars.local/traffic#>
+SELECT ?source ?begin ?finish WHERE { ?c k:kind ?kind; k:source ?source; k:begin ?begin; k:finish ?finish . FILTER (?kind="spatial_temporal" || ?kind="spatial_temporal_speed") }

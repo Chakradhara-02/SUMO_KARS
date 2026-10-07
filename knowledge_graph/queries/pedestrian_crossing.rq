@@ -1,0 +1,2 @@
+PREFIX k: <https://sumo-kars.local/traffic#>
+SELECT ?start ?end ?speed WHERE { ?c k:source "crossing advisory"; k:start ?start; k:end ?end; k:speed ?speed . }

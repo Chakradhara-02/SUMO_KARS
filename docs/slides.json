@@ -1,0 +1,102 @@
+[
+  [
+    "Delay-aware traffic planning",
+    "SUMO simulation of traffic knowledge and reachable motion",
+    "title"
+  ],
+  [
+    "Local planning problem",
+    "Road restrictions and nearby vehicles change while the ego vehicle moves. Delayed observations can misrepresent available space.",
+    "problem"
+  ],
+  [
+    "Project motivation",
+    "A student laptop can reproduce traffic events and compare planning decisions using measured simulation data.",
+    "motivation"
+  ],
+  [
+    "Existing KARS framework",
+    "The referenced KARS work connects traffic knowledge with reachable-set planning. This implementation uses project-level approximations.",
+    "existing"
+  ],
+  [
+    "Experiment gap",
+    "We study delayed and lost traffic knowledge. The full paper was unavailable, so we do not assert an unverified gap in its experiments.",
+    "gap"
+  ],
+  [
+    "Proposed implementation",
+    "Received packets become RDF constraints. The planner prunes motion, selects a chain and requests speed/lane changes.",
+    "architecture"
+  ],
+  [
+    "System architecture",
+    "SUMO, TraCI, simulated IoT, RDF/SPARQL, RS, corridor DP, SLSQP and control form a repeating loop.",
+    "architecture"
+  ],
+  [
+    "Simulated IoT layer",
+    "A seeded channel delays or drops packets. Each snapshot retains its generation timestamp. No hardware sensor is claimed.",
+    "iot"
+  ],
+  [
+    "Knowledge graph",
+    "Static schema describes roads and lanes. Dynamic triples describe observed vehicles and active restrictions. SPARQL drives pruning.",
+    "kg"
+  ],
+  [
+    "Reachable motion",
+    "Offline samples define actions. Online propagation uses x_next=x+v dt+0.5a dt\u00b2 and v_next=v+a dt. The grid is finite.",
+    "rs"
+  ],
+  [
+    "Traffic constraint handling",
+    "Swept segments are checked against spatial, spatial-speed, spatial-temporal and spatial-temporal-speed restrictions.",
+    "constraints"
+  ],
+  [
+    "Corridor and chain selection",
+    "Terminal lane endpoints define ancestor corridors. DP minimizes speed deficit, acceleration, lane switching and center distance.",
+    "corridor"
+  ],
+  [
+    "Trajectory generation",
+    "SLSQP smooths longitudinal acceleration within bounds. Invalid optimization falls back to the feasible DP chain.",
+    "trajectory"
+  ],
+  [
+    "Age-aware extension",
+    "Vehicle occupancy grows with packet age. Missing or stale knowledge triggers controlled braking. Compare safety and progress together.",
+    "extension"
+  ],
+  [
+    "SUMO demonstration",
+    "Construction, temporary lane blockage, lead braking, changed speed cap and traffic signal exercise the full pipeline.",
+    "demo"
+  ],
+  [
+    "Measured results",
+    "Use the completed run CSV and JSON. Arrival, collision events, rule violations and clearance describe executed behavior.",
+    "results"
+  ],
+  [
+    "Baseline comparison",
+    "A* searches the same feasible time-state graph. Basic RS omits traffic-rule pruning. All planners retain identical SUMO safety.",
+    "comparison"
+  ],
+  [
+    "Project advantages",
+    "Explicit queries and rejection sources make decisions auditable. Tests and seeded scenarios support reproduction.",
+    "advantages"
+  ],
+  [
+    "Limits and future work",
+    "Add validated lateral dynamics and physical obstacles. Obtain the full paper for equation alignment. Calibrate uncertainty before real deployment.",
+    "future"
+  ],
+  [
+    "Conclusion",
+    "The project demonstrates knowledge-driven local planning and an implementable delay-aware extension. Measured comparisons determine its benefit.",
+    "conclusion"
+  ]
+]

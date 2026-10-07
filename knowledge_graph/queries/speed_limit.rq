@@ -1,0 +1,2 @@
+PREFIX k: <https://sumo-kars.local/traffic#>
+SELECT ?limit WHERE { k:ego k:speed_limit ?limit . }

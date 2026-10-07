@@ -1,0 +1,2 @@
+PREFIX k: <https://sumo-kars.local/traffic#>
+SELECT (MIN(?cap) AS ?allowed) WHERE { k:ego k:x ?x . ?c k:kind "spatial_speed"; k:start ?s; k:end ?e; k:speed ?cap . FILTER (?x>=?s && ?x<=?e) }
