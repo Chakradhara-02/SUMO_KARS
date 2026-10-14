@@ -67,7 +67,9 @@ class RunManager:
         launch = read_json(folder/'launch.json')
         status = read_json(folder/'status.json',{'state':'starting','time':0})
         process = self.processes.get(folder.name)
-        alive = process.poll() is None if process else process_alive(launch.get('pid'))
+        # A recycled OS PID must not resurrect an already completed saved run.
+        alive = process.poll() is None if process else (
+            status.get('state') in ('starting','running','paused') and process_alive(launch.get('pid')))
         if status.get('state') in ('starting','running','paused') and not alive:
             status = {'state':'failed','error':'Simulation process ended before saving its final status'}
             atomic_json(folder/'status.json',status)
@@ -83,7 +85,8 @@ class RunManager:
         with self.lock:
             if any(r['alive'] for r in self.runs()):
                 raise ValueError('Stop the current run before starting another')
-            scenario, algorithm = params.get('scenario','demo'),params.get('algorithm','kars_delay')
+            scenario, algorithm = params.get('scenario','demo'),params.get('algorithm','kars')
+            if scenario=='city':algorithm='city'
             if scenario not in SCENARIOS or algorithm not in ALGORITHMS:
                 raise ValueError('Unknown scenario or planner')
             def numeric(key, default, lower, upper):
@@ -98,6 +101,11 @@ class RunManager:
             if not values['seed'].is_integer():
                 raise ValueError('Random seed must be an integer')
             outage = params.get('outage',False)
+            if scenario=='city':
+                from .city import city_route
+                city_route(params.get('city_start','n0_0'),params.get('city_destination','n4_4'))
+                city_count=numeric('city_vehicles',180,20,600)
+                if not city_count.is_integer():raise ValueError('City traffic count must be an integer')
             run_id = time.strftime('%Y%m%d_%H%M%S')+'_'+uuid.uuid4().hex[:6]
             folder = self.root/run_id
             folder.mkdir()
@@ -106,6 +114,10 @@ class RunManager:
                     '--output',str(folder),'--control-file',str(folder/'control.json')]
             for key,value in values.items():
                 args += ['--'+key,str(int(value) if key=='seed' else value)]
+            if scenario=='city':
+                args += ['--city-start',params.get('city_start','n0_0'),
+                         '--city-destination',params.get('city_destination','n4_4'),
+                         '--city-vehicles',str(int(city_count))]
             if params.get('gui',False):
                 args += ['--gui']
             if outage:
@@ -115,6 +127,7 @@ class RunManager:
                 process = subprocess.Popen(args,cwd=ROOT,stdout=log,stderr=subprocess.STDOUT,**flags)
             self.processes[run_id] = process
             atomic_json(folder/'launch.json',{'pid':process.pid,'scenario':scenario,'algorithm':algorithm,
+                                              'city_network':'indian_city.net.xml' if scenario=='city' else None,
                                               'started_at':time.time(),'parameters':params})
             return {'id':run_id}
 
@@ -181,17 +194,21 @@ class RunManager:
         return data.getvalue()
 
 
-def network_data():
-    root = ET.parse(ROOT/'sumo/network/road.net.xml').getroot()
+def network_data(scenario=None,version=None):
+    from .city import build_city_network, CITY_POINTS
+    city_path=ROOT/'sumo/network/city/city.net.xml' if version=='legacy' else build_city_network() if scenario=='city' else None
+    root = ET.parse(city_path if scenario=='city' else ROOT/'sumo/network/road.net.xml').getroot()
     return {'lanes':[{'id':lane.get('id'),'internal':edge.get('id').startswith(':'),
                       'width':float(lane.get('width','3.2')),
                       'shape':[[float(v) for v in pair.split(',')] for pair in lane.get('shape').split()]}
                      for edge in root.findall('edge') for lane in edge.findall('lane')],
+            'city':scenario=='city','points':CITY_POINTS if scenario=='city' else [],
+            'left_hand':root.get('lefthand')=='true','network_file':city_path.name if scenario=='city' else 'road.net.xml',
             'junctions':[{'id':j.get('id'),'shape':[[float(v) for v in p.split(',')]
                          for p in j.get('shape','').split()]} for j in root.findall('junction')
                          if j.get('type') != 'internal'],
             'signals':[{'id':c.get('tl'),'link':int(c.get('linkIndex')),
-                        'lane':c.get('from')+'_'+c.get('fromLane')} for c in root.findall('connection')
+                        'lane':c.get('from')+'_'+c.get('fromLane'),'direction':c.get('dir','s')} for c in root.findall('connection')
                        if c.get('tl') and c.get('linkIndex')]}
 
 
@@ -220,7 +237,10 @@ def make_handler(manager):
                 if url.path == '/api/runs':
                     self.send(manager.runs())
                 elif url.path == '/api/network':
-                    self.send(network_data())
+                    self.send(network_data(params.get('scenario',[None])[0],params.get('version',[None])[0]))
+                elif url.path == '/api/city-route':
+                    from .city import city_route
+                    self.send(city_route(params.get('start',['n0_0'])[0],params.get('destination',['n4_4'])[0]))
                 elif url.path == '/api/scenarios':
                     self.send({k:{'title':v[0],'description':v[1]} for k,v in SCENARIO_INFO.items()})
                 elif url.path == '/api/frame':
@@ -232,11 +252,13 @@ def make_handler(manager):
                     self.send({'log':path.read_text(encoding='utf-8',errors='replace')[-12000:] if path.exists() else ''})
                 elif url.path == '/api/export':
                     self.send(manager.archive(run_id),content_type='application/zip',filename=run_id+'.zip')
-                elif url.path in ('/','/app.js','/style.css'):
+                elif url.path in ('/','/app.js','/app.bundle.js','/style.css','/scene3d.js','/planners.js',
+                                  '/vendor/three.module.js','/vendor/three.core.js','/vendor/OrbitControls.js'):
                     filename = 'index.html' if url.path=='/' else url.path[1:]
                     types = {'index.html':'text/html; charset=utf-8','app.js':'text/javascript; charset=utf-8',
                              'style.css':'text/css; charset=utf-8'}
-                    self.send((ROOT/'simulation_ui'/filename).read_bytes(),content_type=types[filename])
+                    content_type = types.get(filename,'text/javascript; charset=utf-8')
+                    self.send((ROOT/'simulation_ui'/filename).read_bytes(),content_type=content_type)
                 else:
                     self.send({'error':'Not found'},404)
             except (ValueError,OSError) as error:

@@ -1,12 +1,31 @@
 """Execute lane-level plans with bounded acceleration and committed lane changes."""
+from .models import State
 
 
 class TrajectoryTracker:
     def __init__(self, config):
         self.config = config
         self.lane_target = None
+        self.lane_origin = None
         self.lane_started = -1e9
         self.last_speed = None
+
+    def planning_state(self, ego, now):
+        """Carry committed target/origin lanes into a replan during lateral motion."""
+        self._release_completed(ego, now)
+        if self.lane_target is not None:
+            # SUMO may delay a requested manoeuvre; reserve both lanes until it
+            # completes or the request expires, even after nominal duration.
+            hold = max(self.config['simulation_dt'],
+                       self.config['lane_change_duration']-(now-self.lane_started))
+            return State(ego.x,ego.speed,self.lane_target,now,hold,self.lane_origin)
+        return State(ego.x,ego.speed,max(0,min(self.config['lanes']-1,ego.lane)),now)
+
+    def _release_completed(self, ego, now):
+        completed = self.lane_target == ego.lane and abs(ego.lateral_position) < .05
+        expired = now-self.lane_started >= self.config['lane_change_duration']+self.config['dt']
+        if completed or expired:
+            self.lane_target = self.lane_origin = None
 
     def command(self, connection, ego, now, requested_speed, requested_lane, emergency=False):
         cfg = self.config
@@ -14,15 +33,13 @@ class TrajectoryTracker:
         speed = min(speed, ego.speed + cfg['max_acceleration'] * cfg['simulation_dt'])
         speed = max(speed, ego.speed + cfg['min_acceleration'] * cfg['simulation_dt'])
         connection.vehicle.setSpeed('ego', float(speed))
-        completed = self.lane_target == ego.lane and abs(ego.lateral_position) < .05
-        expired = now - self.lane_started >= cfg['lane_change_duration'] + cfg['dt']
-        if completed or expired:
-            self.lane_target = None
+        self._release_completed(ego,now)
         allowed = ego.road_id in ('in', 'out') and not (80 <= ego.x <= 140)
         if not emergency and allowed and self.lane_target is None and requested_lane != ego.lane:
             requested_lane = ego.lane + (1 if requested_lane > ego.lane else -1)
             if 0 <= requested_lane < cfg['lanes']:
                 self.lane_target = requested_lane
+                self.lane_origin = ego.lane
                 self.lane_started = now
                 connection.vehicle.changeLane('ego', requested_lane, cfg['lane_change_duration'] + cfg['dt'])
         tracking_error = ego.speed-self.last_speed if self.last_speed is not None else 0.

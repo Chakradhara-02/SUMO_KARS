@@ -18,8 +18,8 @@ from .scenarios import ScenarioWorld, prepare_routes, prepare_additional, signal
 from .control import TrajectoryTracker, collision_risk
 from .storage import atomic_json, read_text_retry, read_json
 
-SCENARIOS = ['static','semi_dynamic','dynamic','emergency','iot_delay','demo']
-ALGORITHMS = ['kars','kars_delay','astar','rs']
+SCENARIOS = ['static','semi_dynamic','dynamic','emergency','iot_delay','demo','city']
+ALGORITHMS = ['kars','kars_delay','astar','rs','city']
 
 def collect(connection, now):
     vehicles = []
@@ -64,7 +64,11 @@ def snapshot_json(plan):
             'candidates':[{'lane':c['lane'],'margin':c['margin'],'cost':c['cost'],'score':c['score'],
                            'nodes':list(c['graph'])} for c in plan['candidates']],
             'selected_lane':plan['selected_lane'],'trajectory':plan['trajectory'],
-            'removed_edges':len(plan['rejected']),'emergency':plan['emergency']}
+            'diagnostics':plan.get('diagnostics',{}),
+            'plan_time':plan['raw'].nodes[0]['state'].t,
+            'removed_edges':len(plan['rejected']),'emergency':plan['emergency'],
+            'emergency_reason':plan.get('emergency_reason',''),
+            'controlled_stop':plan.get('controlled_stop',False),'control_reason':plan.get('control_reason','')}
 
 def summarize(frame, collisions, arrived, packet_channel, config):
     if frame.empty:
@@ -188,7 +192,7 @@ def _run_simulation(scenario='demo',algorithm='kars_delay',seed=1,duration=None,
             local_ids = {v.vehicle_id for v in local}
             fused = local + ([v for v in packet['vehicles'] if v.vehicle_id not in local_ids
                              and math.hypot(v.x-ego.x,v.y-ego.y)>config['sensor_range']] if packet else [])
-            remote = vehicle_constraints(fused,now,config,uncertainty)
+            remote = vehicle_constraints(fused,now,config,uncertainty,ego)
             # Map rules and nearby infrastructure are available locally. Distant events
             # arrive only via IoT; replanning cannot see undelivered event changes.
             local_road = [c for c in road if c.kind in ('marking','spatial_speed') and c.source!='updated speed limit'
@@ -197,6 +201,14 @@ def _run_simulation(scenario='demo',algorithm='kars_delay',seed=1,duration=None,
             distant_road = [c for c in packet['constraints'] if c.source not in local_sources
                             and not c.source.startswith('traffic light')] if packet else []
             delivered_constraints = local_road + distant_road + remote
+            communication_degraded = uncertainty and (packet is None or age>config['stale_timeout'])
+            if communication_degraded:
+                # Missing remote packets alone are not a physical emergency.
+                # Keep the stopping distance inside the available local sensing range.
+                visibility_speed = min(config['max_speed'],math.sqrt(
+                    2*abs(config['min_acceleration'])*max(0.,config['sensor_range']-config['safety_gap'])))
+                delivered_constraints.append(Constraint('spatial_speed',ego.x,ego.x+1000,
+                                                        speed=visibility_speed,source='local visibility speed cap'))
             signature = tuple((c.kind,c.source,c.speed,c.start,c.end) for c in delivered_constraints
                               if c.source not in {v.vehicle_id for v in fused})
             changed = signature!=last_signature
@@ -216,8 +228,7 @@ def _run_simulation(scenario='demo',algorithm='kars_delay',seed=1,duration=None,
                     # Baselines get exactly the same delivered packet without RDF conversion.
                     current_constraints = delivered_constraints
                     query_seconds = 0.
-                hold = max(0.,config['lane_change_duration']-(now-tracker.lane_started)) if tracker.lane_target is not None else 0.
-                active_plan = planner.plan(State(ego.x,ego.speed,max(0,min(2,ego.lane)),now,hold),current_constraints)
+                active_plan = planner.plan(tracker.planning_state(ego,now),current_constraints)
                 planning_seconds, rs_seconds = active_plan['planning_seconds'],active_plan['rs_seconds']
                 stopping_distance = ego.speed**2/(2*abs(config['min_acceleration']))
                 imminent = any(c.kind in ('spatial','spatial_temporal') and c.lane==-1
@@ -230,9 +241,9 @@ def _run_simulation(scenario='demo',algorithm='kars_delay',seed=1,duration=None,
                 if emergency_blocked:
                     active_plan['emergency'] = True
                     active_plan['trajectory'] = None
-                if uncertainty and (packet is None or age>config['stale_timeout']):
-                    active_plan['emergency'] = True
-                    active_plan['trajectory'] = None
+                    active_plan['controlled_stop'] = False
+                    active_plan['control_reason'] = ''
+                    active_plan['emergency_reason'] = 'Active all-lane obstacle inside the stopping envelope; waiting until it clears.'
                 if active_plan['trajectory']:
                     target_speed = active_plan['trajectory']['velocity'][1]
                     target_lane = active_plan['trajectory']['lane'][1]
@@ -241,6 +252,14 @@ def _run_simulation(scenario='demo',algorithm='kars_delay',seed=1,duration=None,
                                  'triples':len(kg.static)+len(kg.dynamic),'ego':ego.record(),
                                  'local_vehicles':len(local),'remote_vehicles':len(fused)-len(local),
                                  'planning_ms':planning_seconds*1000,'query_ms':query_seconds*1000})
+                uses_query = algorithm in ('kars','kars_delay')
+                snapshot['pipeline'] = {
+                    'query_used':uses_query,'static_triples':len(kg.static),
+                    'dynamic_triples':len(kg.dynamic) if uses_query else 0,
+                    'query':(ROOT/'knowledge_graph/queries/constraints.rq').read_text() if uses_query else '',
+                    'query_rows':kg.rows[:6] if uses_query else [],
+                    'rdf_groups':kg.evidence() if uses_query else {},
+                }
                 plans.append(snapshot)
                 live_snapshot = snapshot.copy()
             if active_plan and active_plan['emergency']:
@@ -270,12 +289,20 @@ def _run_simulation(scenario='demo',algorithm='kars_delay',seed=1,duration=None,
                                  timeline=world.timeline,world_constraints=[asdict(c) for c in road],
                                  history=[{k:r[k] for k in ('timestamp','speed','acceleration','clearance','knowledge_age')}
                                           for r in ego_rows[-300:]],
-                                 emergency=bool(active_plan and active_plan['emergency']))
+                                 sensing={'range':config['sensor_range'],'packet_time':packet['time'] if packet else None,
+                                          'degraded':communication_degraded,
+                                          'local_ids':sorted(local_ids),
+                                          'remote_ids':[v.vehicle_id for v in fused if v.vehicle_id not in local_ids],
+                                          'observations':[{'id':v.vehicle_id,'x':v.x,'y':v.y,'speed':v.speed,
+                                                           'lane':v.lane_id,'timestamp':v.timestamp,
+                                                           'source':'onboard' if v.vehicle_id in local_ids else 'IoT'} for v in fused[:32]]},
+                                 emergency=bool(active_plan and active_plan['emergency']),
+                                 emergency_reason=active_plan.get('emergency_reason','') if active_plan else '')
             atomic_json(output/'live.json',live_snapshot)
             atomic_json(output/'status.json',{'state':'running','time':now})
             # Streaming frames remain usable even if a run is interrupted.
             trace.write(json.dumps({k:live_snapshot[k] for k in ('time','ego','vehicles','signals',
-                                    'age','clearance','ttc','commands','emergency','world_constraints','timeline','packets')})+'\n')
+                                    'age','clearance','ttc','commands','emergency','emergency_reason','sensing','world_constraints','timeline','packets')})+'\n')
             trace.flush()
             if realtime_factor > 0:
                 remaining = config['simulation_dt']/realtime_factor - (time.perf_counter()-begin)
@@ -323,6 +350,7 @@ def run_simulation(scenario='demo',algorithm='kars_delay',seed=1,duration=None,g
     config = load_config(config_overrides)
     if duration is not None and (not math.isfinite(duration) or duration <= 0):
         raise ValueError('Duration must be finite and positive')
+    if scenario=='city':algorithm='city'
     if density <= 0:
         raise ValueError('Traffic insertion period must be positive')
     folder = Path(output) if output else ROOT/'outputs'/f'{scenario}_{algorithm}_seed{seed}'
@@ -337,11 +365,17 @@ def run_simulation(scenario='demo',algorithm='kars_delay',seed=1,duration=None,g
                 'source_hashes':{str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
                                  for p in [ROOT/'main.py',*sorted((ROOT/'kars').glob('*.py'))]},
                 'config_sha256':hashlib.sha256(json.dumps(config,sort_keys=True).encode()).hexdigest()}
+    if scenario=='city':manifest.update(city_network='indian_city.net.xml',traffic_side='left')
     atomic_json(folder/'manifest.json',manifest)
     atomic_json(folder/'status.json',{'state':'starting','time':0.})
     try:
-        result = _run_simulation(scenario,algorithm,seed,duration,gui,delay,loss,folder,
-                                 control_file,make_plots,density,config_overrides)
+        if scenario=='city':
+            from .city import run_city
+            result=run_city(folder,config,seed,duration or config['duration'],gui,control_file)
+        else:
+            if algorithm=='city':raise ValueError('City routing requires the city scenario')
+            result = _run_simulation(scenario,algorithm,seed,duration,gui,delay,loss,folder,
+                                     control_file,make_plots,density,config_overrides)
         atomic_json(folder/'status.json',{'state':'cancelled' if result['end_reason']=='cancelled' else 'completed',
                                          'time':result['final_time'],'end_reason':result['end_reason']})
         manifest=read_json(folder/'manifest.json',manifest)

@@ -12,12 +12,25 @@ The console opens at http://127.0.0.1:8765. Click **Configure run**, choose a sc
 
 You can also double-click `Start_Simulation.cmd`. Reopening it uses an already-running console.
 
-- Follow ego / overview; scroll to zoom and drag to pan.
+- **3D road:** clean driving visualization with detailed vehicles, blue planned path and speed display. The default **Rear camera** follows behind the ego vehicle and tracks its heading. Follow ego, overview, orbit, pan and zoom are also available.
+- **2D map:** switch to the measured overhead map at any time, including on browsers without WebGL. Both views support every scenario and planner, live runs and saved replays.
+- Click the **lane change, acceleration, target speed or safe clearance** cards for short explanations and current measured/commanded values. Use the **ⓘ** buttons in Configure run to explain each parameter.
+- **Reachable regions:** raw grey and retained teal projections appear around the vehicle on the road in both views. The separate reachable-state plot has been removed. These strips summarize sampled future extents; they do not certify every point inside them as safe.
+- **Sensor view:** shows the sensing boundary, observed-actor highlights and onboard/IoT links. Blue links are onboard observations; purple links are delivered remote observations. The model uses simulated TraCI sensing, not a camera/lidar detector.
+- **Live explainable workspace:** click Sense & fuse → Ontology → Knowledge graph → SPARQL → Reachable regions → Search → Execution. Each stage explains its role and shows recorded data, RDF relationships, actual query/results, pruning and commands. A* marks RDF/SPARQL stages as bypassed.
+- Scenario events appear in the driving view; active infrastructure restrictions have road shading and signs. Motion uses buffered measured-frame interpolation (about 650 ms display latency), with smooth heading-aware rear-camera following. The numeric telemetry reports the latest frame.
 - Click a vehicle to inspect its measured state.
 - Inspect reachable states, feasible corridors, RDF/SPARQL timing and constraints.
+- **Planner methods:** KARS and A* are the two selectable dashboard planners. Legacy methods remain available through the command line and saved-run history.
+- **Compare planners:** select a reference run; only completed results with matching settings, code, inputs and SUMO version appear. Configure missing planners with its settings. A single seed is descriptive.
+- New runs record stage timings, constraint coverage, graph counts, solver, smoothing status and rejection reasons. Older runs show available data and request a rerun for missing diagnostics.
 - Saved runs support time scrubbing, replay and ZIP export.
 - Optional **native SUMO GUI** follows the ego vehicle.
 - Refreshing the page or restarting the console preserves saved runs and recovers an active process.
+
+Braking fixes: fractional speeds can stop without reversing; known same-lane followers cannot block forward escape through inflated predicted margins, while their occupancy still guards lane transitions. When the full horizon is unavailable, a valid slower prefix is executed and replanned. Immediate failure or an active all-lane obstacle still requests bounded emergency braking, with its recorded reason available by clicking the status banner. The legacy age-aware method uses a local-visibility speed cap for stale messages instead of treating missing packets alone as an emergency. SUMO retains independent following and collision safeguards.
+
+New runs are required to see recorded sensor, RDF/query and braking-reason details; older replays retain their original outputs.
 
 ## Command-line simulation
 
@@ -90,6 +103,29 @@ py -3 -m venv sumo_env
 .\sumo_env\Scripts\python.exe main.py serve
 ```
 
-SUMO binaries are discovered from the parent `bin` folder, `SUMO_HOME`, PATH or the installed `eclipse-sumo` package. The console requires no Node build, internet access or image API.
+SUMO binaries are discovered from the parent `bin` folder, `SUMO_HOME`, PATH or the installed `eclipse-sumo` package. The console requires no Node build, internet access or image API. Three.js 0.186.1 is bundled locally under the MIT license; WebGL support is needed for 3D rendering. The supplied `app.bundle.js` is ready to run.
 
-This is an implemented lane-level simulation inspired by KARS, not a verified reproduction of a paper whose PDF was not supplied. IoT is simulated; SUMO supplies longitudinal traffic physics, gradual lateral movement and independent safety. The sampled planner is not a full steering/bicycle controller or a formal collision-avoidance proof. Map scenery is drawn in code; graphs and actor motion come from simulation data.
+The supplied KARS paper has now been reviewed against the code. Read [the code-to-paper mapping and enhancement priorities](docs/PAPER_ALIGNMENT_REVIEW.md). The overall sequence aligns with the paper, while lane dynamics, offline reuse, corridor scoring and evaluation are simplified. Frenetix and NGSIM reproduction are not implemented. IoT is simulated; SUMO supplies longitudinal traffic physics, gradual lateral movement and independent safety. The sampled planner is not a formal collision-avoidance proof. The 3D view displays measured states and planned data; scenery is drawn in code.
+
+## Dashboard development
+
+Edit `simulation_ui/app.js`, `scene3d.js`, `planners.js`, `index.html` and `style.css`. After JavaScript changes, rebuild the committed browser bundle using esbuild 0.28.2 (development only):
+
+```powershell
+npx --yes esbuild@0.28.2 simulation_ui/app.js --bundle --format=iife --minify --outfile=simulation_ui/app.bundle.js
+node --test tests/planner_comparison.test.mjs tests/motion.test.mjs
+```
+
+Reload the page after changes. Restart the server after Python backend changes. Three.js files and license are in `simulation_ui/vendor/`. Runtime traffic data and scenery load locally without a CDN.
+
+## City map and destination routing
+
+Open `http://127.0.0.1:8765/?view=city` or select **City map** in the sidebar. Choose a named starting point and destination, set **Traffic vehicles** (20–600; default 180), then press **Drive to destination**. Green marks the start; orange marks the destination. The route appears in both 2D and 3D, with an overview camera and a city minimap. The city has 25 junctions, 80 directed street segments, two lanes in each direction, and nine signalized intersections. Traffic is replenished as vehicles finish their routes and includes cars, buses, trucks and a braking event.
+
+City mode uses SUMO route finding, signal/right-of-way controls and car following. The KARS/A* reachable-state experiments remain on the original straight-road scenarios. City runs retain their route, measured traffic, trace, telemetry and trip information for replay and export.
+
+Example: `python main.py run --scenario city --algorithm city --city-start n0_0 --city-destination n4_4 --city-vehicles 180 --duration 300 --no-plots`.
+
+The updated city is an Indian-style synthetic street grid with **left-hand traffic**, black/yellow kerbs, yellow centre lines, zebra crossings and curbside signal gantries. Car, bus, truck, auto-rickshaw and motorcycle types share the roads. SUMO uses SL2015 lateral dynamics with bounded lateral acceleration and zero lateral speed at standstill; the viewer turns the vehicle body along an interpolated steering curve between observed positions. Large destination spheres have been replaced with ground markers.
+
+City views show the measured ego trail (orange), a road-aligned feasible trajectory preview (blue) and reachable-state samples (green; unfiltered samples in grey). The five-second preview uses the actual lane/turn geometry, speed limits, signal schedules and constant-speed projections of observed vehicles, with 0.2-second swept collision checks. These sampled visualizations are separate from SUMO's executed city-driving controls. Old city replays retain their original right-hand network; start a new city run for the Indian-style layout and recorded reachability.

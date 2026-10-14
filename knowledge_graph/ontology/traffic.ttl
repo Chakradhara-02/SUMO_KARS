@@ -16,6 +16,15 @@ k:ConstructionZone a owl:Class; rdfs:subClassOf k:RoadBlock .
 k:PedCrossing a owl:Class .
 k:LaneMarking a owl:Class .
 k:Constraint a owl:Class .
+k:RoadBoundary a owl:Class .
+k:SpeedLimitSign a owl:Class .
+k:hasBoundary a owl:ObjectProperty .
+k:hasLaneMarking a owl:ObjectProperty .
+k:within a owl:ObjectProperty .
+k:has a owl:ObjectProperty .
+k:restricts a owl:ObjectProperty .
+k:hasSpeedLimitValue a owl:DatatypeProperty .
+k:boundaryOffset a owl:DatatypeProperty .
 k:locatedAt a owl:ObjectProperty .
 k:hasNextLane a owl:ObjectProperty .
 k:hasPreviousLane a owl:ObjectProperty .

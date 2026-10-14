@@ -15,6 +15,12 @@ def test_sumo_closed_loop(tmp_path):
     assert ego.x.iloc[-1]>ego.x.iloc[0]
     assert ego.traffic_light.notna().any()
     assert 'obstacle_information' in traffic
+    import json
+    pipeline=json.loads((tmp_path/'plans.json').read_text())[-1]['pipeline']
+    assert pipeline['rdf_groups']['Road boundaries']
+    assert any(t['object']=='solid' for t in pipeline['rdf_groups']['Lane markings'])
+    assert any(t['predicate']=='hasSpeedLimitValue' for t in pipeline['rdf_groups']['Speed zones and crossings'])
+    assert pipeline['rdf_groups']['Planner constraints']
 
 def test_dashboard_loads():
     from streamlit.testing.v1 import AppTest

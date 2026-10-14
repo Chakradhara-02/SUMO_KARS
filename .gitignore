@@ -12,3 +12,5 @@ __pycache__/
 .chart-data-*/
 docs/.build/
 .env
+docs/.qa/
+.dist/

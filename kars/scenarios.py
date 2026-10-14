@@ -4,6 +4,7 @@ import math
 from .models import ROOT
 
 SCENARIO_INFO = {
+    'city': ('City traffic', 'A bidirectional street grid, signalized intersections and destination routing in dense traffic.'),
     'static': ('Road rules', 'Signalized intersection, crossing traffic and speed zones.'),
     'semi_dynamic': ('Roadworks', 'A parked maintenance truck and a temporary lane obstruction.'),
     'dynamic': ('Braking traffic', 'A lead car merges, brakes, waits and rejoins traffic.'),

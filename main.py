@@ -25,6 +25,9 @@ def main():
     parser.add_argument('--realtime',type=float,default=0,help='Simulation seconds per wall second; 0 runs unrestricted')
     parser.add_argument('--jitter',type=float,default=0,help='Uniform IoT delay variation (+/- seconds)')
     parser.add_argument('--sensor-range',type=float,default=120,help='Onboard sensor range in metres')
+    parser.add_argument('--city-start',default='n0_0')
+    parser.add_argument('--city-destination',default='n4_4')
+    parser.add_argument('--city-vehicles',type=int,default=180)
     parser.add_argument('--outage',nargs=2,type=float,metavar=('BEGIN','END'),help='IoT blackout interval')
     args = parser.parse_args()
     if args.command=='serve':
@@ -41,7 +44,9 @@ def main():
                        args.output,args.control_file,not args.no_plots,args.density,
                        {'realtime_factor':args.realtime,'delay_jitter':args.jitter,'sensor_range':args.sensor_range,
                         'outage_begin':args.outage[0] if args.outage else 30.,
-                        'outage_end':args.outage[1] if args.outage else 30.})
+                        'outage_end':args.outage[1] if args.outage else 30.,
+                        'city_start':args.city_start,'city_destination':args.city_destination,
+                        'city_vehicles':args.city_vehicles})
     else:
         from kars.experiments import experiments, sweep
         if args.command=='experiments':

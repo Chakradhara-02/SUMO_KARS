@@ -1,6 +1,7 @@
 """Corridor candidates, sub-corridor DP/A*, and validated SLSQP smoothing."""
 import heapq
 import time
+from collections import Counter
 import numpy as np
 import networkx as nx
 from scipy.optimize import minimize
@@ -119,9 +120,14 @@ class Planner:
         raw = online_rs(state,self.offline,self.config)
         rs_seconds = time.perf_counter()-begin
         # Basic RS sees physical roadblocks/vehicle occupancies; traffic rules are omitted.
-        used = constraints if self.algorithm!='rs' else [c for c in constraints if c.kind in ('spatial','spatial_temporal')]
+        used = constraints if self.algorithm!='rs' else [c for c in constraints if c.kind in ('spatial','spatial_temporal','rear_occupancy')]
+        stage = time.perf_counter()
         adjusted,rejected = rs_adjustment(raw,used)
+        adjustment_seconds = time.perf_counter()-stage
+        stage = time.perf_counter()
         candidates = corridors(adjusted,self.config['horizon'])
+        corridor_seconds = time.perf_counter()-stage
+        stage = time.perf_counter()
         scored = []
         solver = astar if self.algorithm=='astar' else dynamic_programming
         for candidate in candidates:
@@ -131,7 +137,52 @@ class Planner:
             scored.append((candidate['score'],chain,candidate))
         selected = min(scored,key=lambda item:item[0]) if scored else None
         chain = selected[1] if selected else []
+        controlled_stop = False
+        if not chain and len(adjusted)>1:
+            # Failure to span the entire horizon is not necessarily imminent
+            # danger. Use a validated prefix ending at the lowest reachable
+            # speed, then replan; never execute a disconnected/unvalidated edge.
+            depth=max(adjusted.nodes[n]['layer'] for n in adjusted)
+            ends=[n for n in adjusted if adjusted.nodes[n]['layer']==depth]
+            slowest=min(adjusted.nodes[n]['state'].v for n in ends)
+            prefix=adjusted.copy()
+            prefix.remove_nodes_from([n for n in ends if prefix.nodes[n]['state'].v>slowest+1e-8])
+            chain,_=solver(prefix,{**self.config,'horizon':depth})
+            controlled_stop=bool(chain)
+        search_seconds = time.perf_counter()-stage
+        stage = time.perf_counter()
         trajectory = optimize_trajectory([adjusted.nodes[n]['state'] for n in chain],used,self.config) if chain else None
+        optimization_seconds = time.perf_counter()-stage
+        diagnostics = {
+            'algorithm':self.algorithm, 'solver':'A*' if self.algorithm=='astar' else 'Dynamic programming',
+            'plan_time':state.t, 'dt':self.config['dt'], 'horizon':self.config['horizon'],
+            'constraints_received':len(constraints), 'constraints_used':len(used),
+            'constraint_kinds':dict(Counter(c.kind for c in used)),
+            'raw_nodes':len(raw), 'raw_edges':raw.number_of_edges(),
+            'feasible_nodes':len(adjusted), 'feasible_edges':adjusted.number_of_edges(),
+            'layers':[{'step':layer,
+                       'raw':sum(raw.nodes[n]['layer']==layer for n in raw),
+                       'feasible':sum(adjusted.nodes[n]['layer']==layer for n in adjusted)}
+                      for layer in range(self.config['horizon']+1)],
+            'rejection_reasons':dict(Counter(reason for edge in rejected for reason in edge['reasons'])),
+            'timings_ms':{'generation':rs_seconds*1000,'adjustment':adjustment_seconds*1000,
+                          'corridors':corridor_seconds*1000,'search':search_seconds*1000,
+                          'optimization':optimization_seconds*1000},
+            'optimization_status':'validated braking prefix' if controlled_stop else
+                                  'accepted' if trajectory and trajectory['optimized'] else
+                                  'discrete fallback' if trajectory else 'no feasible path',
+            'selected_cost':selected[2]['cost'] if selected else None,
+            'selected_score':selected[0] if selected else None,
+            'controlled_stop':controlled_stop,
+            'executed_horizon':len(chain)-1 if chain else 0,
+        }
         return {'raw':raw,'adjusted':adjusted,'rejected':rejected,'candidates':candidates,
-                'selected_lane':selected[2]['lane'] if selected else None,'chain':chain,'trajectory':trajectory,
-                'emergency':not bool(chain),'rs_seconds':rs_seconds,'planning_seconds':time.perf_counter()-begin}
+                'diagnostics':diagnostics,
+                'selected_lane':selected[2]['lane'] if selected else adjusted.nodes[chain[-1]]['state'].lane if chain else None,
+                'chain':chain,'trajectory':trajectory,'controlled_stop':controlled_stop,
+                'control_reason':'Full horizon unavailable; using a constraint-validated braking prefix and replanning.' if controlled_stop else '',
+                'emergency':not bool(chain),
+                'emergency_reason':('No constraint-valid full-horizon path. Rejections: '+
+                                    ', '.join(reason for reason,_ in Counter(
+                                        reason for edge in rejected for reason in edge['reasons']).most_common(3))) if not chain else '',
+                'rs_seconds':rs_seconds,'planning_seconds':time.perf_counter()-begin}
