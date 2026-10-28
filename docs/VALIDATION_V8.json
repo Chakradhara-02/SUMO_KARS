@@ -1,0 +1,279 @@
+{
+  "build": "parking_city_v8",
+  "python_tests_passed": 88,
+  "python_test_execution": "pytest with third-party plugin autoload disabled; local JUnit result checked before packaging",
+  "javascript_tests_passed": 39,
+  "named_destination_pairs_connected": 90,
+  "ground_parking_lots": 10,
+  "slots_per_lot": 8,
+  "available_slots_per_lot": 5,
+  "parking_model": "bounded private-lot kinematic forward/reverse controller through TraCI; static occupied bay obstacles",
+  "native_runs": {
+    "v8_mall_smoke": {
+      "success": 1,
+      "arrived": 1,
+      "collision_events": 0,
+      "travel_time": 206.70000000000002,
+      "average_speed": 2.177374148686332,
+      "path_length": 459.37000000000006,
+      "acceleration_rms": 0.9620931184797691,
+      "max_acceleration": 4.500000000000002,
+      "jerk_rms": 2.8878464410437106,
+      "max_jerk": 41.76195981871613,
+      "minimum_clearance": 2.5010047573540986,
+      "emergency_entries": 0,
+      "rule_violations": null,
+      "planning_ms": 0.0,
+      "query_ms": 0.0,
+      "rs_ms": 0.0,
+      "cycle_ms": 15.713316199226817,
+      "packets_sent": 0,
+      "packets_lost": 0,
+      "end_reason": "arrived",
+      "final_time": 206.8,
+      "peak_vehicles": 22,
+      "total_spawned": 26,
+      "parked_at_destination": true,
+      "arrival_bay": {
+        "id": "destination_bay",
+        "slot_id": "A4",
+        "edge": "park_city_mall_aisle__arrival_city_mall",
+        "lane": "park_city_mall_aisle__arrival_city_mall_0",
+        "x": 677.2,
+        "y": 247.65,
+        "z": 0.0,
+        "heading": 180.0,
+        "length": 6.0,
+        "width": 3.1,
+        "name": "City Mall bay A4",
+        "start": 3.0,
+        "end": 12.0
+      },
+      "parking_slot": "A4",
+      "parking_model": "bounded private-lot kinematic forward/reverse controller"
+    },
+    "v8_dense350": {
+      "success": 1,
+      "arrived": 1,
+      "collision_events": 0,
+      "travel_time": 134.20000000000002,
+      "average_speed": 3.5546014241775103,
+      "path_length": 486.46999999999997,
+      "acceleration_rms": 1.0555174221455161,
+      "max_acceleration": 4.500000000000002,
+      "jerk_rms": 4.269893848273163,
+      "max_jerk": 45.50838465165992,
+      "minimum_clearance": 2.5010019010745737,
+      "emergency_entries": 0,
+      "rule_violations": null,
+      "planning_ms": 0.0,
+      "query_ms": 0.0,
+      "rs_ms": 0.0,
+      "cycle_ms": 58.142485554730676,
+      "packets_sent": 0,
+      "packets_lost": 0,
+      "end_reason": "arrived",
+      "final_time": 134.3,
+      "peak_vehicles": 351,
+      "total_spawned": 376,
+      "parked_at_destination": true,
+      "arrival_bay": {
+        "id": "destination_bay",
+        "slot_id": "A8",
+        "edge": "park_city_mall_aisle__arrival_city_mall",
+        "lane": "park_city_mall_aisle__arrival_city_mall_0",
+        "x": 690.8,
+        "y": 247.65,
+        "z": 0.0,
+        "heading": 180.0,
+        "length": 6.0,
+        "width": 3.1,
+        "name": "City Mall bay A8",
+        "start": 3.0,
+        "end": 12.0
+      },
+      "parking_slot": "A8",
+      "parking_model": "bounded private-lot kinematic forward/reverse controller"
+    },
+    "v8_ground_chowk": {
+      "success": 1,
+      "arrived": 1,
+      "collision_events": 0,
+      "travel_time": 104.10000000000001,
+      "average_speed": 2.303864066330655,
+      "path_length": 273.1680969384727,
+      "acceleration_rms": 1.1616418013646503,
+      "max_acceleration": 4.500000000000002,
+      "jerk_rms": 4.705406027678539,
+      "max_jerk": 42.2201098535016,
+      "minimum_clearance": null,
+      "emergency_entries": 0,
+      "rule_violations": null,
+      "planning_ms": 0.0,
+      "query_ms": 0.0,
+      "rs_ms": 0.0,
+      "cycle_ms": 19.6218517274501,
+      "packets_sent": 0,
+      "packets_lost": 0,
+      "end_reason": "arrived",
+      "final_time": 104.2,
+      "peak_vehicles": 61,
+      "total_spawned": 61,
+      "parked_at_destination": true,
+      "arrival_bay": {
+        "id": "destination_bay",
+        "slot_id": "A3",
+        "edge": "park_n2_2_aisle__arrival_n2_2",
+        "lane": "park_n2_2_aisle__arrival_n2_2_0",
+        "x": 433.8,
+        "y": 257.65,
+        "z": 0.0,
+        "heading": 180.0,
+        "length": 6.0,
+        "width": 3.1,
+        "name": "Central Chowk bay A3",
+        "start": 3.0,
+        "end": 12.0
+      },
+      "parking_slot": "A3",
+      "parking_model": "bounded private-lot kinematic forward/reverse controller"
+    }
+  },
+  "manual_bay_api": {
+    "gzip_network": true,
+    "manual_wait": true,
+    "occupied_rejected": true,
+    "selected_slot": "A6",
+    "parked": true,
+    "pose": {
+      "vehicle_id": "ego",
+      "timestamp": 206.9,
+      "x": 684.0,
+      "y": 247.65,
+      "lane_id": "",
+      "lane": -1073741824,
+      "speed": 0.0,
+      "acceleration": 0.0,
+      "heading": 180.0,
+      "road_id": "park_city_mall_aisle__arrival_city_mall",
+      "traffic_light": "",
+      "traffic_light_state": "",
+      "speed_limit": 13.9,
+      "obstacle_information": "",
+      "length": 4.7,
+      "width": 1.8,
+      "lateral_position": -1073741824.0,
+      "z": 0.0,
+      "signals": 8,
+      "indicator_reason": "Parked at destination"
+    }
+  },
+  "parking_footprint_audits": [
+    {
+      "run": "v8_mall_smoke",
+      "slot": "A4",
+      "parking_frames": 236,
+      "occupied_vehicle_overlaps": 0,
+      "maximum_observed_speed_mps": 1.4000000000005115,
+      "maximum_heading_rate_deg_s": 16.00089806116506,
+      "ground_level": true,
+      "complete": true
+    },
+    {
+      "run": "v8_dense350",
+      "slot": "A8",
+      "parking_frames": 285,
+      "occupied_vehicle_overlaps": 0,
+      "maximum_observed_speed_mps": 1.4000000000005115,
+      "maximum_heading_rate_deg_s": 15.996768628664228,
+      "ground_level": true,
+      "complete": true
+    },
+    {
+      "run": "v8_ground_chowk",
+      "slot": "A3",
+      "parking_frames": 224,
+      "occupied_vehicle_overlaps": 0,
+      "maximum_observed_speed_mps": 1.4000000000002273,
+      "maximum_heading_rate_deg_s": 16.023811823387234,
+      "ground_level": true,
+      "complete": true
+    },
+    {
+      "run": "20261017_101953_26a439",
+      "slot": "A6",
+      "parking_frames": 238,
+      "occupied_vehicle_overlaps": 0,
+      "maximum_observed_speed_mps": 1.4000000000005115,
+      "maximum_heading_rate_deg_s": 16.00089806116506,
+      "ground_level": true,
+      "complete": true
+    }
+  ],
+  "interpolation_only_benchmark": [
+    {
+      "vehicles": 100,
+      "iterations": 200,
+      "previous_ms": 52.4173,
+      "current_ms": 26.5599,
+      "speedup": 1.9735503522227116
+    },
+    {
+      "vehicles": 350,
+      "iterations": 200,
+      "previous_ms": 144.03099999999998,
+      "current_ms": 29.347699999999975,
+      "speedup": 4.907744048085544
+    },
+    {
+      "vehicles": 600,
+      "iterations": 200,
+      "previous_ms": 413.79999999999995,
+      "current_ms": 50.75840000000005,
+      "speedup": 8.152345227587936
+    }
+  ],
+  "browser_webgl_checks": {
+    "v8_browser_qa": {
+      "dom": {
+        "signal": "ARRIVED",
+        "indicator": "Parked at destination",
+        "reachable": "Parking manoeuvre \u00b7 checked private-lot path",
+        "webgl": true,
+        "status": "COMPLETED",
+        "parking": "\u2713 PARKING COMPLETECity Mall \u00b7 A8PA1A2A3A4A5A6A7A8Parked securely"
+      },
+      "exceptions": []
+    },
+    "v8_reversing_qa": {
+      "dom": {
+        "signal": "No traffic signal ahead on this route",
+        "indicator": "Reversing into selected bay",
+        "reachable": "Parking manoeuvre \u00b7 checked private-lot path",
+        "webgl": true,
+        "status": "COMPLETED",
+        "parking": "AUTO PARKCity Mall \u00b7 A8RA1A2A3A4A5A6A7A8Reversing into your bay"
+      },
+      "exceptions": []
+    },
+    "v8_underpass_qa": {
+      "dom": {
+        "signal": "RED | 53 s | 483 m ahead",
+        "indicator": "Continuing straight",
+        "reachable": "5 s preview \u00b7 310 / 310 feasible samples \u00b7 3 route branches",
+        "webgl": true,
+        "status": "COMPLETED",
+        "parking": ""
+      },
+      "exceptions": []
+    }
+  },
+  "visual_checks": "Completed parking, reversing and recorded underpass frames inspected in Brave WebGL; no JavaScript exceptions.",
+  "audible_output": "Opt-in audio logic tested; speakers not checked.",
+  "performance_scope": "350-background-vehicle native journey completed; interpolation microbenchmarks cover up to 600. No whole-app FPS claim.",
+  "signal_stages_seconds": {
+    "green": 25,
+    "amber": 3,
+    "all_red": 6
+  }
+}

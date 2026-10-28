@@ -34,7 +34,7 @@ def collect(connection, now):
                                 tls[0][0] if tls else '',tls[0][3] if tls else '',
                                 connection.lane.getMaxSpeed(lane_id),
                                 length=domain.getLength(vehicle_id),width=domain.getWidth(vehicle_id),
-                                lateral_position=domain.getLateralLanePosition(vehicle_id)))
+                                lateral_position=domain.getLateralLanePosition(vehicle_id),signals=domain.getSignals(vehicle_id)))
     return vehicles
 
 def road_constraints(connection, ego, now, scenario, events, config):
@@ -58,7 +58,10 @@ def road_constraints(connection, ego, now, scenario, events, config):
 
 def snapshot_json(plan):
     def nodes(graph):
-        return [{'id':n,**asdict(graph.nodes[n]['state']),'layer':graph.nodes[n]['layer']} for n in graph]
+        return [{'id':n,**asdict(graph.nodes[n]['state']),'layer':graph.nodes[n]['layer'],
+                 'valid':n in plan['adjusted'],
+                 'reasons':[] if n in plan['adjusted'] else list(dict.fromkeys(
+                     reason for edge in plan['rejected'] if edge['to']==n for reason in edge['reasons'])) or ['No safe connection from the current state']} for n in graph]
     return {'raw':nodes(plan['raw']),'adjusted':nodes(plan['adjusted']),
             'edges':list(plan['adjusted'].edges),'chain':plan['chain'],
             'candidates':[{'lane':c['lane'],'margin':c['margin'],'cost':c['cost'],'score':c['score'],
@@ -365,7 +368,7 @@ def run_simulation(scenario='demo',algorithm='kars_delay',seed=1,duration=None,g
                 'source_hashes':{str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest()
                                  for p in [ROOT/'main.py',*sorted((ROOT/'kars').glob('*.py'))]},
                 'config_sha256':hashlib.sha256(json.dumps(config,sort_keys=True).encode()).hexdigest()}
-    if scenario=='city':manifest.update(city_network='indian_city.net.xml',traffic_side='left')
+    if scenario=='city':manifest.update(city_network='metro_flow_v9.net.xml',traffic_side='left')
     atomic_json(folder/'manifest.json',manifest)
     atomic_json(folder/'status.json',{'state':'starting','time':0.})
     try:

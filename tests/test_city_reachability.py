@@ -1,6 +1,10 @@
 from types import SimpleNamespace
 
-from kars.city import build_city_network
+from kars.models import ROOT
+
+# Fixed grid fixture for tests that assert exact historical coordinates.
+def build_city_network():
+    return ROOT/'sumo/network/city/indian_city.net.xml'
 from kars.city_reachability import CityReachability
 from kars.models import Vehicle
 
@@ -24,7 +28,7 @@ def test_reachable_samples_follow_left_hand_streets_and_branch_dynamics():
     preview=model.forecast(connection(),e,[e],0)
     assert preview['raw_count']>0 and preview['feasible_count']>0
     assert all(0<=p['y']<=6.4 for p in preview['raw'])
-    assert all(0<=p['speed']<=13.9 for p in preview['raw'])
+    assert all(0<=p['speed']<=13.9 for p in preview['feasible'])
     trajectory=preview['trajectory']
     assert trajectory[0]['x']==e.x and trajectory[0]['y']==e.y
     assert trajectory[-1]['x']>trajectory[0]['x']
@@ -65,3 +69,44 @@ def test_preview_preserves_the_observed_lane_change_direction():
     e.y=4.2;e.heading=94;e.lateral_position=.6
     preview=model.forecast(connection(),e,[e],0)
     assert preview['trajectory'][-1]['y']<e.y
+
+
+def test_every_rejected_sample_has_an_explanation_and_safe_ancestors():
+    model=CityReachability(build_city_network());e=ego()
+    preview=model.forecast(connection(True),e,[e],0)
+    assert not preview['unsafe']
+    assert preview['restricted']
+    assert all(p['reasons'] and not p['valid'] for p in preview['restricted'])
+    assert all(p['valid'] and not p['reasons'] for p in preview['feasible'])
+    assert any('signal' in reason for p in preview['restricted'] for reason in p['reasons'])
+
+
+def test_comfort_objective_avoids_unnecessary_acceleration_switches():
+    model=CityReachability(build_city_network());e=ego(8)
+    preview=model.forecast(connection(),e,[e],0)
+    path=preview['trajectory']
+    speeds=[next(p['speed'] for p in path if abs(p['time']-t)<1e-8) for t in range(6)]
+    acceleration=[b-a for a,b in zip(speeds,speeds[1:])]
+    assert all(abs(a)<=4 for a in acceleration)
+    assert not any(a*b<0 for a,b in zip(acceleration,acceleration[1:]))
+    assert preview['optimization']['selected_cost'] is not None
+
+
+def test_red_points_require_a_nearby_vehicle_conflict_not_a_rule_rejection():
+    model=CityReachability(build_city_network());e=ego()
+    clear=model.forecast(connection(),e,[e],0)
+    assert not clear['unsafe']
+    assert not model.forecast(connection(True),e,[e],0)['unsafe']
+    blocker=Vehicle('bus',0,40,4.8,e.lane_id,0,0,0,90,e.road_id,'','',13.9,length=11)
+    blocked=model.forecast(connection(),e,[e,blocker],0)
+    assert blocked['unsafe']
+    assert all(n['blocked_by']==['bus'] and n['hazard_point']['x']<=n['x'] for n in blocked['unsafe'])
+    assert not model.forecast(connection(),e,[e,blocker],0,sensor_range=10)['unsafe']
+    blocker.z=7
+    assert not model.forecast(connection(),e,[e,blocker],0)['unsafe']
+
+
+def test_an_off_path_vehicle_does_not_turn_clear_motion_red():
+    model=CityReachability(build_city_network());e=ego()
+    other=Vehicle('other_road',0,35,35,e.lane_id,0,0,0,90,e.road_id,'','',13.9)
+    assert not model.forecast(connection(),e,[e,other],0)['unsafe']

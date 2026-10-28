@@ -1,0 +1,18 @@
+{
+  "build": "straight_city_v4",
+  "python_tests_passed": 47,
+  "javascript_tests_passed": 20,
+  "named_destination_pairs_connected": 72,
+  "native_sumo_dense_run": {
+    "duration_seconds": 300,
+    "vehicles": 180,
+    "arrived": 177,
+    "still_travelling": 3,
+    "recorded_collisions": 0
+  },
+  "native_smoke_routes": {
+    "arrived": 3,
+    "recorded_collisions": 0
+  },
+  "browser_and_live_traci_validation": "pending desktop verification"
+}

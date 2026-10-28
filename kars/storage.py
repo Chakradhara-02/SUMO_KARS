@@ -25,13 +25,18 @@ def atomic_json(path,value):
     temporary=path.with_name(path.name+'.'+uuid.uuid4().hex+'.tmp')
     temporary.write_text(json.dumps(value,indent=2,allow_nan=False),encoding='utf-8')
     try:
-        for attempt in range(20):
+        for attempt in range(40):
             try:
                 temporary.replace(path)
                 return
             except PermissionError:
-                if attempt==19:
+                if attempt==39:
                     raise
-                time.sleep(.01)
+                time.sleep(min(.1,.01*(attempt+1)))
     finally:
-        temporary.unlink(missing_ok=True)
+        try:
+            temporary.unlink(missing_ok=True)
+        except PermissionError:
+            # A scanner may also hold the abandoned temporary file briefly.
+            # Preserve the actual replacement error if one is already propagating.
+            pass

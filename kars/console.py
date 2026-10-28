@@ -103,7 +103,7 @@ class RunManager:
             outage = params.get('outage',False)
             if scenario=='city':
                 from .city import city_route
-                city_route(params.get('city_start','n0_0'),params.get('city_destination','n4_4'))
+                city_route(params.get('city_start','n0_0'),params.get('city_destination','n4_4'),params.get('city_parking_slot'))
                 city_count=numeric('city_vehicles',180,20,600)
                 if not city_count.is_integer():raise ValueError('City traffic count must be an integer')
             run_id = time.strftime('%Y%m%d_%H%M%S')+'_'+uuid.uuid4().hex[:6]
@@ -118,6 +118,7 @@ class RunManager:
                 args += ['--city-start',params.get('city_start','n0_0'),
                          '--city-destination',params.get('city_destination','n4_4'),
                          '--city-vehicles',str(int(city_count))]
+                if params.get('city_parking_slot'):args+=['--city-parking-slot',params['city_parking_slot']]
             if params.get('gui',False):
                 args += ['--gui']
             if outage:
@@ -127,7 +128,7 @@ class RunManager:
                 process = subprocess.Popen(args,cwd=ROOT,stdout=log,stderr=subprocess.STDOUT,**flags)
             self.processes[run_id] = process
             atomic_json(folder/'launch.json',{'pid':process.pid,'scenario':scenario,'algorithm':algorithm,
-                                              'city_network':'indian_city.net.xml' if scenario=='city' else None,
+                                              'city_network':'metro_flow_v9.net.xml' if scenario=='city' else None,
                                               'started_at':time.time(),'parameters':params})
             return {'id':run_id}
 
@@ -147,6 +148,20 @@ class RunManager:
                 control['realtime_factor'] = speed
             atomic_json(folder/'control.json',control)
             return control
+
+    def select_parking(self,run_id,slot_id):
+        from .parking import choose_slot
+        with self.lock:
+            folder=self.folder(run_id)
+            if not self.describe(folder)['alive']:raise ValueError('Start a new journey to choose parking')
+            frame=self.frame(run_id);lot=frame.get('city',{}).get('trip',{}).get('parking_lot')
+            if not lot:raise ValueError('Parking information is not ready')
+            choose_slot(lot,slot_id)
+            state=frame.get('city',{}).get('parking',{})
+            if state.get('active') and state.get('stage')!='waiting_selection':raise ValueError('Parking is already in progress')
+            command=read_json(folder/'control.json',{'action':'run','realtime_factor':1})
+            command['parking_slot']=slot_id;atomic_json(folder/'control.json',command)
+            return {'slot_id':slot_id,'accepted':True}
 
     def frame(self, run_id, when=None):
         folder = self.folder(run_id)
@@ -195,14 +210,24 @@ class RunManager:
 
 
 def network_data(scenario=None,version=None):
-    from .city import build_city_network, CITY_POINTS
-    city_path=ROOT/'sumo/network/city/city.net.xml' if version=='legacy' else build_city_network() if scenario=='city' else None
+    from .city import build_city_network, CITY_POINTS, CITY_DISTRICTS
+    from .parking import parking_lot
+    city_path=None
+    if scenario=='city':
+        known={'legacy':'city.net.xml','indian_city.net.xml':'indian_city.net.xml',
+               'metro_v2.net.xml':'metro_v2.net.xml','metro_v3.net.xml':'metro_v3.net.xml','metro_straight_v4.net.xml':'metro_straight_v4.net.xml','metro_signals_v5.net.xml':'metro_signals_v5.net.xml','metro_protected_v6.net.xml':'metro_protected_v6.net.xml','metro_bridges_v7.net.xml':'metro_bridges_v7.net.xml','metro_parking_v8.net.xml':'metro_parking_v8.net.xml','metro_flow_v9.net.xml':'metro_flow_v9.net.xml'}
+        if version and version not in known:raise ValueError('Unknown city network version')
+        city_path=ROOT/'sumo/network/city'/known[version] if version else build_city_network()
+        if version=='metro_flow_v9.net.xml' and not city_path.exists():city_path=build_city_network()
     root = ET.parse(city_path if scenario=='city' else ROOT/'sumo/network/road.net.xml').getroot()
     return {'lanes':[{'id':lane.get('id'),'internal':edge.get('id').startswith(':'),
                       'width':float(lane.get('width','3.2')),
                       'shape':[[float(v) for v in pair.split(',')] for pair in lane.get('shape').split()]}
                      for edge in root.findall('edge') for lane in edge.findall('lane')],
             'city':scenario=='city','points':CITY_POINTS if scenario=='city' else [],
+            'parking_lots':[parking_lot(p) for p in CITY_POINTS] if scenario=='city' and (not version or version in ('metro_parking_v8.net.xml','metro_flow_v9.net.xml')) else [],
+            'districts':CITY_DISTRICTS if scenario=='city' else [],
+            'bounds':{'min_x':-300,'max_x':1160,'min_y':-300,'max_y':1160} if scenario=='city' else None,
             'left_hand':root.get('lefthand')=='true','network_file':city_path.name if scenario=='city' else 'road.net.xml',
             'junctions':[{'id':j.get('id'),'shape':[[float(v) for v in p.split(',')]
                          for p in j.get('shape','').split()]} for j in root.findall('junction')
@@ -219,7 +244,13 @@ def make_handler(manager):
 
         def send(self, value, code=200, content_type='application/json', filename=None):
             body = json.dumps(value,allow_nan=False).encode() if content_type=='application/json' else value
+            compressed=content_type=='application/json' and len(body)>32000 and 'gzip' in self.headers.get('Accept-Encoding','')
+            if compressed:
+                import gzip
+                body=gzip.compress(body,compresslevel=1)
             self.send_response(code)
+            if compressed:self.send_header('Content-Encoding','gzip')
+            self.send_header('Vary','Accept-Encoding')
             self.send_header('Content-Type',content_type)
             self.send_header('Content-Length',str(len(body)))
             self.send_header('Cache-Control','no-store')
@@ -234,13 +265,15 @@ def make_handler(manager):
                 url = urlparse(self.path)
                 params = parse_qs(url.query)
                 run_id = params.get('id',[''])[0]
-                if url.path == '/api/runs':
+                if url.path == '/api/version':
+                    self.send({'build':'roadster_city_v10'})
+                elif url.path == '/api/runs':
                     self.send(manager.runs())
                 elif url.path == '/api/network':
                     self.send(network_data(params.get('scenario',[None])[0],params.get('version',[None])[0]))
                 elif url.path == '/api/city-route':
                     from .city import city_route
-                    self.send(city_route(params.get('start',['n0_0'])[0],params.get('destination',['n4_4'])[0]))
+                    self.send(city_route(params.get('start',['n0_0'])[0],params.get('destination',['n4_4'])[0],params.get('slot',[None])[0]))
                 elif url.path == '/api/scenarios':
                     self.send({k:{'title':v[0],'description':v[1]} for k,v in SCENARIO_INFO.items()})
                 elif url.path == '/api/frame':
@@ -252,7 +285,9 @@ def make_handler(manager):
                     self.send({'log':path.read_text(encoding='utf-8',errors='replace')[-12000:] if path.exists() else ''})
                 elif url.path == '/api/export':
                     self.send(manager.archive(run_id),content_type='application/zip',filename=run_id+'.zip')
-                elif url.path in ('/','/app.js','/app.bundle.js','/style.css','/scene3d.js','/planners.js',
+                elif url.path in ('/assets/roadster-drive.glb','/assets/roadster-showroom.glb','/assets/roadster-info.json'):
+                    self.send((ROOT/'simulation_ui'/url.path[1:]).read_bytes(),content_type='model/gltf-binary' if url.path.endswith('.glb') else 'application/json')
+                elif url.path in ('/','/app.js','/app.bundle.js','/reachability.worker.bundle.js','/style.css','/scene3d.js','/planners.js',
                                   '/vendor/three.module.js','/vendor/three.core.js','/vendor/OrbitControls.js'):
                     filename = 'index.html' if url.path=='/' else url.path[1:]
                     types = {'index.html':'text/html; charset=utf-8','app.js':'text/javascript; charset=utf-8',
@@ -279,6 +314,8 @@ def make_handler(manager):
                     raise ValueError('Request must be a JSON object')
                 if self.path == '/api/run':
                     self.send(manager.start(data))
+                elif self.path == '/api/parking-slot':
+                    self.send(manager.select_parking(data['id'],data['slot_id']))
                 elif self.path == '/api/control':
                     self.send(manager.command(data['id'],data['action'],data.get('speed')))
                 else:
@@ -304,9 +341,9 @@ def serve(port=8765, open_browser=True):
     except OSError:
         url=f'http://127.0.0.1:{port}'
         try:
-            with urllib.request.urlopen(url+'/api/scenarios',timeout=2) as response:
+            with urllib.request.urlopen(url+'/api/version',timeout=2) as response:
                 existing=json.load(response)
-            if set(existing)!=set(SCENARIOS):
+            if existing.get('build')!='roadster_city_v10':
                 raise ValueError('Port is used by another application')
         except (OSError,ValueError):
             raise OSError(f'Port {port} is in use; choose another with --port') from None
