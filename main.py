@@ -28,6 +28,7 @@ def main():
     parser.add_argument('--city-start',default='n0_0')
     parser.add_argument('--city-destination',default='n4_4')
     parser.add_argument('--city-vehicles',type=int,default=180)
+    parser.add_argument('--city-parking-slot',default=None)
     parser.add_argument('--outage',nargs=2,type=float,metavar=('BEGIN','END'),help='IoT blackout interval')
     args = parser.parse_args()
     if args.command=='serve':
@@ -46,7 +47,7 @@ def main():
                         'outage_begin':args.outage[0] if args.outage else 30.,
                         'outage_end':args.outage[1] if args.outage else 30.,
                         'city_start':args.city_start,'city_destination':args.city_destination,
-                        'city_vehicles':args.city_vehicles})
+                        'city_vehicles':args.city_vehicles,'city_parking_slot':args.city_parking_slot})
     else:
         from kars.experiments import experiments, sweep
         if args.command=='experiments':

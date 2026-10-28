@@ -16,13 +16,13 @@ def test_city_network_and_selected_route():
     root=ET.parse(build_city_network()).getroot()
     assert root.get('lefthand')=='true'
     streets=[e for e in root.findall('edge') if not e.get('id').startswith(':')]
-    assert len(streets)==80
-    assert all(len(e.findall('lane'))==2 for e in streets)
-    assert len(root.findall('tlLogic'))==9
+    assert len(streets)>100
+    assert {len(e.findall('lane')) for e in streets}=={1,2,3}
+    assert len(root.findall('tlLogic'))==25
     edges={e.get('id'):e for e in streets}
     route=city_route('n0_0','n4_4')
     assert edges[route['edges'][0]].get('from')=='n0_0'
-    assert edges[route['edges'][-1]].get('to')=='n4_4'
+    assert edges[route['edges'][-1]].get('to')=='arrival_n4_4'
     connections={(c.get('from'),c.get('to')) for c in root.findall('connection')}
     assert all(pair in connections for pair in zip(route['edges'],route['edges'][1:]))
     assert route['distance']>1000
@@ -38,10 +38,12 @@ def test_dense_city_traffic_records_real_motion_and_route(tmp_path):
     frame=json.loads((tmp_path/'live.json').read_text())
     assert frame['city']['trip']['start']['id']=='n0_0'
     assert frame['city']['trip']['destination']['id']=='n4_4'
-    assert len(frame['signals'])==9
-    assert frame['city']['routing_engine']=='SUMO city routing'
+    assert len(frame['signals'])==25
+    assert frame['city']['routing_engine']=='Traffic-aware alternative routes'
     assert frame['city_reachability']['raw_count']>0
     assert frame['ego_trace']
+    assert len(frame['ego_trace'][-1])==3
+    assert frame['ego_trace'][-1][2]==frame['ego']['z']
     manifest=json.loads((tmp_path/'manifest.json').read_text())
     assert manifest['lane_change_model']=='SL2015'
     types=ET.parse(tmp_path/'traffic.rou.xml').getroot().findall('vType')
@@ -53,14 +55,15 @@ def test_dense_city_traffic_records_real_motion_and_route(tmp_path):
 
 
 def test_city_ego_arrives_at_selected_destination(tmp_path):
-    metrics=run_simulation('city','city',duration=80,output=tmp_path,make_plots=False,
+    metrics=run_simulation('city','city',duration=600,output=tmp_path,make_plots=False,
                            config_overrides={'city_vehicles':20,'city_start':'n0_0','city_destination':'n2_0'})
-    assert metrics['arrived']==1
+    assert metrics['arrived']==1 and metrics['parked_at_destination']
     assert metrics['end_reason']=='arrived'
-    trips=ET.parse(tmp_path/'tripinfo.xml').getroot()
-    ego=trips.find("tripinfo[@id='ego']")
-    route=city_route('n0_0','n2_0')
-    assert ego.get('arrivalLane').startswith(route['edges'][-1])
+    frame=json.loads((tmp_path/'live.json').read_text());bay=frame['city']['arrival_bay'];ego=frame['ego']
+    assert frame['city']['parked'] and ego['speed']<.01
+    assert abs(ego['x']-bay['x'])<.5 and abs(ego['y']-bay['y'])<.5
+    assert abs((ego['heading']-bay['heading']+180)%360-180)<1
+    assert frame['city']['parking']['complete']
 
 
 def test_city_pause_resume_stop_replay_and_export(tmp_path):

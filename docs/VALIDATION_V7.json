@@ -1,0 +1,112 @@
+{
+  "build": "bridge_city_v7",
+  "python_tests_passed": 79,
+  "javascript_tests_passed": 35,
+  "named_destination_pairs_connected": 72,
+  "signalized_junctions": 25,
+  "protected_approaches": true,
+  "green_phases_checked_against_SUMO_foe_matrix": true,
+  "signal_stages_seconds": {
+    "green": 25,
+    "amber": 3,
+    "all_red": 6
+  },
+  "default_city_journey_limit_seconds": 1800,
+  "dense_live_runs": [
+    {
+      "success": 1,
+      "arrived": 1,
+      "collision_events": 0,
+      "travel_time": 406.7,
+      "average_speed": 4.0759419932999235,
+      "path_length": 1657.8321152072474,
+      "acceleration_rms": 0.9802219396219366,
+      "max_acceleration": 4.500000000000002,
+      "jerk_rms": 2.7766837786503897,
+      "max_jerk": 40.82259512077497,
+      "minimum_clearance": 2.486771904808859,
+      "emergency_entries": 0,
+      "rule_violations": null,
+      "planning_ms": 0.0,
+      "query_ms": 0.0,
+      "rs_ms": 0.0,
+      "cycle_ms": 25.661362758055454,
+      "packets_sent": 0,
+      "packets_lost": 0,
+      "end_reason": "arrived",
+      "final_time": 406.8,
+      "peak_vehicles": 181,
+      "total_spawned": 346,
+      "parked_at_destination": true,
+      "arrival_bay": {
+        "id": "destination_bay",
+        "lane": "n4_2__arrival_n4_2_0",
+        "edge": "n4_2__arrival_n4_2",
+        "start": 27.6,
+        "end": 41.6,
+        "x": 802.5073836319405,
+        "y": 443.82058778561566,
+        "z": 0.0,
+        "heading": 317.49023516080644,
+        "name": "IT Park curbside arrival",
+        "length": 8.0,
+        "width": 3.0
+      }
+    },
+    {
+      "success": 1,
+      "arrived": 1,
+      "collision_events": 0,
+      "travel_time": 193.9,
+      "average_speed": 2.5085402887736206,
+      "path_length": 486.4021152072476,
+      "acceleration_rms": 0.8113343022761094,
+      "max_acceleration": 4.500000000000002,
+      "jerk_rms": 2.5340583742385876,
+      "max_jerk": 31.89458498318658,
+      "minimum_clearance": null,
+      "emergency_entries": 0,
+      "rule_violations": null,
+      "planning_ms": 0.0,
+      "query_ms": 0.0,
+      "rs_ms": 0.0,
+      "cycle_ms": 24.80214448463362,
+      "packets_sent": 0,
+      "packets_lost": 0,
+      "end_reason": "arrived",
+      "final_time": 194.0,
+      "peak_vehicles": 181,
+      "total_spawned": 213,
+      "parked_at_destination": true,
+      "arrival_bay": {
+        "id": "destination_bay",
+        "lane": "n4_2__arrival_n4_2_0",
+        "edge": "n4_2__arrival_n4_2",
+        "start": 27.6,
+        "end": 41.6,
+        "x": 802.5073836319405,
+        "y": 443.82058778561566,
+        "z": 0.0,
+        "heading": 317.49023516080644,
+        "name": "IT Park curbside arrival",
+        "length": 8.0,
+        "width": 3.0
+      }
+    }
+  ],
+  "vehicle_footprint_audits": {
+    "v7_itpark_overlap_audit.json": {
+      "nativeOverlaps": 0,
+      "renderedOverlaps": 0,
+      "examples": []
+    },
+    "v7_flyover_overlap_audit.json": {
+      "nativeOverlaps": 0,
+      "renderedOverlaps": 0,
+      "examples": []
+    }
+  },
+  "maximum_signal_heads_per_approach": 3,
+  "fullscreen_controls_tests": "native entry/exit and expanded-view Escape passed",
+  "desktop_visual_and_audio_check": "Not completed: browser processes failed in this execution session. Browser bundle built successfully."
+}

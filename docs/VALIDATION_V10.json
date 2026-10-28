@@ -1,0 +1,173 @@
+{
+  "build": "roadster_city_v10",
+  "javascript_tests_passed": 47,
+  "python_units_passed": 10,
+  "native_parking_test_passed": true,
+  "native_metrics": {
+    "success": 1,
+    "arrived": 1,
+    "collision_events": 0,
+    "travel_time": 119.5,
+    "average_speed": 3.4365094452766516,
+    "path_length": 444.12809693895315,
+    "acceleration_rms": 1.1467189858354216,
+    "max_acceleration": 4.097372995381902,
+    "jerk_rms": 4.21456804365359,
+    "max_jerk": 50.99999999999998,
+    "minimum_clearance": null,
+    "emergency_entries": 0,
+    "rule_violations": null,
+    "planning_ms": 0.0,
+    "query_ms": 0.0,
+    "rs_ms": 0.0,
+    "cycle_ms": 9.149051923076291,
+    "packets_sent": 0,
+    "packets_lost": 0,
+    "end_reason": "arrived",
+    "final_time": 119.6,
+    "peak_vehicles": 22,
+    "total_spawned": 22,
+    "parked_at_destination": true,
+    "arrival_bay": {
+      "id": "destination_bay",
+      "slot_id": "A4",
+      "edge": "park_city_mall_aisle__arrival_city_mall",
+      "lane": "park_city_mall_aisle__arrival_city_mall_0",
+      "x": 677.2,
+      "y": 247.65,
+      "z": 0.0,
+      "heading": 180.0,
+      "length": 6.0,
+      "width": 3.1,
+      "name": "City Mall bay A4",
+      "start": 3.0,
+      "end": 12.0
+    },
+    "parking_slot": "A4",
+    "parking_model": "bounded private-lot kinematic forward/reverse controller"
+  },
+  "browser_checks": {
+    "v10_browser_qa": {
+      "dom": {
+        "signal": "ARRIVED",
+        "indicator": "Parked at destination",
+        "reachable": "Parking complete \u00b7 A8",
+        "webgl": true,
+        "status": "READY",
+        "parking": "\u2713 PARKING COMPLETECity Mall \u00b7 A8P\u2212\u00d7Rotate viewReset viewTesla Roadster \u00b7 vehicle securedView parking bayA1A2A3A4A5A6A7A8Parked securely"
+      },
+      "exceptions": [],
+      "parking_panel_controls": {
+        "minimize": true,
+        "close": true,
+        "restore": true
+      },
+      "roadster_loaded_in_driving_and_showroom": true,
+      "showroom_orbit_control": true,
+      "opening_panels": false
+    },
+    "v10_road_qa": {
+      "dom": {
+        "signal": "RED | 26 s | 34 m ahead",
+        "indicator": "Turning left",
+        "reachable": "5 s preview \u00b7 64 / 219 feasible samples \u00b7 2 route branches",
+        "webgl": true,
+        "status": "COMPLETED",
+        "parking": ""
+      },
+      "exceptions": []
+    }
+  },
+  "browser_fixture_scope": "Parking preview uses a recorded V8 350-background journey with V9 lot geometry. Road preview uses the new V10 native journey. Both load the actual V10 GLBs. Browser captures are recorded-frame visual checks, not a live frame-rate benchmark.",
+  "checks": "Wheel distance and reverse rotation; Ackermann inside/outside angle; position velocity and yaw-rate continuity on unequal sample intervals; measured reverse heading; both GLB structures, dimensions, pivots and triangle budgets; five bay paths and manual bay selection; native forward/reverse arrival and exact final pose; WebGL asset loading and parking controls.",
+  "historical_results": "V9 full regression/network/rerouting checks are retained in VALIDATION_V9.json, not claimed as rerun for V10.",
+  "limitations": [
+    "No hinged body panels in the supplied asset.",
+    "No hardware-independent frame-rate guarantee.",
+    "Speakers not checked.",
+    "Native SUMO can still brake sharply; visual interpolation is not a comfort or safety certification."
+  ],
+  "asset": {
+    "sourceTriangles": 500000,
+    "sourceVertices": 631630,
+    "parts": {
+      "body": 293849,
+      "rear_left": 65500,
+      "rear_right": 62668,
+      "front_left": 41891,
+      "front_right": 36092
+    },
+    "levels": {
+      "drive": {
+        "body": {
+          "triangles": 29999,
+          "error": 0.00033732023439370096
+        },
+        "rear_left": {
+          "triangles": 3500,
+          "error": 0.000679182936437428
+        },
+        "rear_right": {
+          "triangles": 3496,
+          "error": 0.0006565011572092772
+        },
+        "front_left": {
+          "triangles": 3499,
+          "error": 0.0005724367219954729
+        },
+        "front_right": {
+          "triangles": 3500,
+          "error": 0.0004869182303082198
+        },
+        "total_triangles": 43994,
+        "bytes": 2093460,
+        "texture_size": 1024
+      },
+      "showroom": {
+        "body": {
+          "triangles": 84997,
+          "error": 0.00015257549239322543
+        },
+        "rear_left": {
+          "triangles": 9000,
+          "error": 0.00031711673364043236
+        },
+        "rear_right": {
+          "triangles": 9000,
+          "error": 0.0003093508421443403
+        },
+        "front_left": {
+          "triangles": 8999,
+          "error": 0.0002723678480833769
+        },
+        "front_right": {
+          "triangles": 9000,
+          "error": 0.00022831276874057949
+        },
+        "total_triangles": 120996,
+        "bytes": 6985456,
+        "texture_size": 2048
+      }
+    },
+    "source_name": "tesla-roadtser-2026.zip",
+    "source_sha256": "25ffc7916e1bb9a6fd280f7ba0fa9f001ef9fc66caf25848c1424cd04ad61bd4",
+    "canonical": {
+      "length": 4.7,
+      "width": 2.044585943222046,
+      "height": 1.2433326244354248,
+      "front_bumper": [
+        0,
+        0,
+        0
+      ],
+      "forward_axis": "+X",
+      "up_axis": "+Y",
+      "wheelbase": 2.874531000205276,
+      "rear_axle_offset": 3.9097013556866322
+    },
+    "rig": {
+      "wheels": "Two disconnected rear wheel components and two front wheel regions isolated from the combined body. Cylindrical front masks are centered on measured tire geometry.",
+      "body_panels": "Unrigged; no door/bonnet/boot animation supplied. Controls disabled for this asset."
+    }
+  }
+}

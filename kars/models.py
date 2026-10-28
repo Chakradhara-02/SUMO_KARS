@@ -66,6 +66,9 @@ class Vehicle:
     length: float = 5.0
     width: float = 1.8
     lateral_position: float = 0.0
+    z: float = 0.0
+    signals: int = 0
+    indicator_reason: str = ''
 
     def record(self):
         return asdict(self)
