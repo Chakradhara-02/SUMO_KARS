@@ -1,3 +1,9 @@
+# Roadster City V10 - start here
+
+Open [START_HERE.md](START_HERE.md) for the imported Tesla Roadster, updated motion and City Mall parking. Extract the full project ZIP and double-click **Start_City.cmd**. The dashboard opens directly in city mode on port **8784**. Use **Enable sound** for optional driver alerts.
+
+The sections below document the existing straight-road KARS experiments and older dashboard workflows.
+
 # SUMO KARS simulation
 
 ## Start
@@ -14,10 +20,10 @@ You can also double-click `Start_Simulation.cmd`. Reopening it uses an already-r
 
 - **3D road:** clean driving visualization with detailed vehicles, blue planned path and speed display. The default **Rear camera** follows behind the ego vehicle and tracks its heading. Follow ego, overview, orbit, pan and zoom are also available.
 - **2D map:** switch to the measured overhead map at any time, including on browsers without WebGL. Both views support every scenario and planner, live runs and saved replays.
-- Click the **lane change, acceleration, target speed or safe clearance** cards for short explanations and current measured/commanded values. Use the **ⓘ** buttons in Configure run to explain each parameter.
+- Click the **lane change, acceleration, target speed or safe clearance** cards for short explanations and current measured/commanded values. Use the **â“˜** buttons in Configure run to explain each parameter.
 - **Reachable regions:** raw grey and retained teal projections appear around the vehicle on the road in both views. The separate reachable-state plot has been removed. These strips summarize sampled future extents; they do not certify every point inside them as safe.
 - **Sensor view:** shows the sensing boundary, observed-actor highlights and onboard/IoT links. Blue links are onboard observations; purple links are delivered remote observations. The model uses simulated TraCI sensing, not a camera/lidar detector.
-- **Live explainable workspace:** click Sense & fuse → Ontology → Knowledge graph → SPARQL → Reachable regions → Search → Execution. Each stage explains its role and shows recorded data, RDF relationships, actual query/results, pruning and commands. A* marks RDF/SPARQL stages as bypassed.
+- **Live explainable workspace:** click Sense & fuse â†’ Ontology â†’ Knowledge graph â†’ SPARQL â†’ Reachable regions â†’ Search â†’ Execution. Each stage explains its role and shows recorded data, RDF relationships, actual query/results, pruning and commands. A* marks RDF/SPARQL stages as bypassed.
 - Scenario events appear in the driving view; active infrastructure restrictions have road shading and signs. Motion uses buffered measured-frame interpolation (about 650 ms display latency), with smooth heading-aware rear-camera following. The numeric telemetry reports the latest frame.
 - Click a vehicle to inspect its measured state.
 - Inspect reachable states, feasible corridors, RDF/SPARQL timing and constraints.
@@ -41,7 +47,7 @@ New runs are required to see recorded sensor, RDF/query and braking-reason detai
 # Emergency barriers appear at 8 s and clear at 18 s
 .\sumo_env\Scripts\python.exe main.py run --scenario emergency --gui --realtime 1
 
-# Delays, loss, variable latency and a 30–40 s communication outage
+# Delays, loss, variable latency and a 30â€“40 s communication outage
 .\sumo_env\Scripts\python.exe main.py run --scenario iot_delay --delay 1 --loss 0.15 --jitter 0.5 --outage 30 40 --gui --realtime 1 --duration 250
 
 # Headless run; larger insertion period means lighter traffic
@@ -65,9 +71,9 @@ New runs are required to see recorded sensor, RDF/query and braking-reason detai
 | Scenario | Traffic behavior |
 |---|---|
 | `static` | Main road, crossing traffic, signal phases and speed rules |
-| `semi_dynamic` | Stationary maintenance truck in lane 0; lane-1 obstruction from 10–80 s |
+| `semi_dynamic` | Stationary maintenance truck in lane 0; lane-1 obstruction from 10â€“80 s |
 | `dynamic` | Lead car merges and brakes at 12 s, stops at 16 s, resumes at 22 s |
-| `emergency` | Three stationary physical vehicles block the road from 8–18 s |
+| `emergency` | Three stationary physical vehicles block the road from 8â€“18 s |
 | `iot_delay` | Roadworks and braking plus configurable communication impairments |
 | `demo` | Combined traffic, including an upcoming speed-limit update at 18 s |
 
@@ -109,10 +115,10 @@ The supplied KARS paper has now been reviewed against the code. Read [the code-t
 
 ## Dashboard development
 
-Edit `simulation_ui/app.js`, `scene3d.js`, `planners.js`, `index.html` and `style.css`. After JavaScript changes, rebuild the committed browser bundle using esbuild 0.28.2 (development only):
+Edit `simulation_ui/app.js`, `scene3d.js`, `planners.js`, `index.html` and `style.css`. After JavaScript changes, rebuild both committed browser bundles (Node.js/npx is needed for development):
 
 ```powershell
-npx --yes esbuild@0.28.2 simulation_ui/app.js --bundle --format=iife --minify --outfile=simulation_ui/app.bundle.js
+python tools/build_frontend.py
 node --test tests/planner_comparison.test.mjs tests/motion.test.mjs
 ```
 
@@ -120,7 +126,7 @@ Reload the page after changes. Restart the server after Python backend changes. 
 
 ## City map and destination routing
 
-Open `http://127.0.0.1:8765/?view=city` or select **City map** in the sidebar. Choose a named starting point and destination, set **Traffic vehicles** (20–600; default 180), then press **Drive to destination**. Green marks the start; orange marks the destination. The route appears in both 2D and 3D, with an overview camera and a city minimap. The city has 25 junctions, 80 directed street segments, two lanes in each direction, and nine signalized intersections. Traffic is replenished as vehicles finish their routes and includes cars, buses, trucks and a braking event.
+Open `http://127.0.0.1:8765/?view=city` or select **City map** in the sidebar. Choose a named starting point and destination, set **Traffic vehicles** (20â€“600; default 180), then press **Drive to destination**. Green marks the start; orange marks the destination. The route appears in both 2D and 3D, with an overview camera and a city minimap. The city has 25 junctions, 80 directed street segments, two lanes in each direction, and nine signalized intersections. Traffic is replenished as vehicles finish their routes and includes cars, buses, trucks and a braking event.
 
 City mode uses SUMO route finding, signal/right-of-way controls and car following. The KARS/A* reachable-state experiments remain on the original straight-road scenarios. City runs retain their route, measured traffic, trace, telemetry and trip information for replay and export.
 

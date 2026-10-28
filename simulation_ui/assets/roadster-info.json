@@ -1,0 +1,83 @@
+{
+  "sourceTriangles": 500000,
+  "sourceVertices": 631630,
+  "parts": {
+    "body": 293849,
+    "rear_left": 65500,
+    "rear_right": 62668,
+    "front_left": 41891,
+    "front_right": 36092
+  },
+  "levels": {
+    "drive": {
+      "body": {
+        "triangles": 29999,
+        "error": 0.00033732023439370096
+      },
+      "rear_left": {
+        "triangles": 3500,
+        "error": 0.000679182936437428
+      },
+      "rear_right": {
+        "triangles": 3496,
+        "error": 0.0006565011572092772
+      },
+      "front_left": {
+        "triangles": 3499,
+        "error": 0.0005724367219954729
+      },
+      "front_right": {
+        "triangles": 3500,
+        "error": 0.0004869182303082198
+      },
+      "total_triangles": 43994,
+      "bytes": 2093460,
+      "texture_size": 1024
+    },
+    "showroom": {
+      "body": {
+        "triangles": 84997,
+        "error": 0.00015257549239322543
+      },
+      "rear_left": {
+        "triangles": 9000,
+        "error": 0.00031711673364043236
+      },
+      "rear_right": {
+        "triangles": 9000,
+        "error": 0.0003093508421443403
+      },
+      "front_left": {
+        "triangles": 8999,
+        "error": 0.0002723678480833769
+      },
+      "front_right": {
+        "triangles": 9000,
+        "error": 0.00022831276874057949
+      },
+      "total_triangles": 120996,
+      "bytes": 6985456,
+      "texture_size": 2048
+    }
+  },
+  "source_name": "tesla-roadtser-2026.zip",
+  "source_sha256": "25ffc7916e1bb9a6fd280f7ba0fa9f001ef9fc66caf25848c1424cd04ad61bd4",
+  "canonical": {
+    "length": 4.7,
+    "width": 2.044585943222046,
+    "height": 1.2433326244354248,
+    "front_bumper": [
+      0,
+      0,
+      0
+    ],
+    "forward_axis": "+X",
+    "up_axis": "+Y",
+    "wheelbase": 2.874531000205276,
+    "rear_axle_offset": 3.9097013556866322
+  },
+  "rig": {
+    "wheels": "Two disconnected rear wheel components and two front wheel regions isolated from the combined body. Cylindrical front masks are centered on measured tire geometry.",
+    "body_panels": "Unrigged; no door/bonnet/boot animation supplied. Controls disabled for this asset."
+  }
+}

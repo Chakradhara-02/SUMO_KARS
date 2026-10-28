@@ -113,3 +113,67 @@ main{padding:32px 28px;max-width:2200px}h1{font-size:32px}header{margin-bottom:2
 @media(max-width:800px){.city-route-controls{grid-template-columns:1fr 1fr}.city-heading{align-items:flex-start;flex-direction:column}}@media(max-width:480px){.city-controls{padding:16px}.city-route-controls{grid-template-columns:1fr}.city-heading h2{font-size:17px}}
 .city-mode .driving-decisions{display:none}.city-mode #minimap{width:125px;height:125px}.city-mode .canvas-wrap{min-height:560px}
 .city-preview-note{font-size:11px;line-height:1.7;color:#6c858e;margin:14px 0 0}
+
+.driver-alerts{position:absolute;top:44px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none;z-index:4}
+.turn-indicators{display:flex;gap:64px;background:#142330db;padding:7px 16px;border-radius:30px;color:#526274;font-size:22px}
+.turn-indicators .lit{color:#ffb331;text-shadow:0 0 12px #ffb331}
+#adas-state{background:#f5faf5ed;color:#345851;padding:5px 12px;border-radius:12px;font-size:11px;white-space:nowrap}
+#adas-state[data-level="danger"]{background:#b92923;color:white}
+#adas-state[data-level="caution"]{background:#ffdf9f;color:#674011}
+
+.journey-strip{display:grid;grid-template-columns:1fr 1fr 2fr 1fr;gap:12px;padding:16px;background:#eef4f6;border:1px solid #d7e2e7;border-radius:12px;margin-top:16px}
+.journey-strip div{display:flex;flex-direction:column;gap:7px}.journey-strip small{font-size:9px;letter-spacing:1px;color:#6d8292}.journey-strip b{font-size:13px;color:#233f53}
+@media(max-width:700px){.journey-strip{grid-template-columns:1fr 1fr}.journey-strip b{font-size:12px}}
+
+.next-signal{padding:6px 12px;background:#17364dec;color:white;border-radius:6px;font-size:12px;font-weight:700;white-space:nowrap}
+.next-signal[data-color="red"]{background:#a72c2a}.next-signal[data-color="green"]{background:#177950}.next-signal[data-color="amber"]{background:#f0bd3b;color:#302813}
+.indicator-reason{font-size:10px;color:#183c50;background:#ffffffec;padding:3px 8px;border-radius:5px}
+
+/* One compact, centered guidance card; warning row appears only when needed. */
+.driver-alerts{top:18px;max-width:calc(100% - 32px);width:max-content;display:grid;grid-template-columns:minmax(180px,1fr) auto;gap:0;align-items:center;border-radius:12px;background:#102533ed;box-shadow:0 5px 20px #10253322;color:#f3fafc;overflow:hidden}
+.turn-indicators{gap:10px;justify-content:space-between;padding:10px 14px;background:none;border-radius:0;min-width:0;font-size:20px}
+.indicator-reason{font-size:12px;font-weight:600;color:#f3fafc;background:none;padding:0;text-align:center}
+.next-signal{border-radius:0;margin:0;padding:13px 14px;font-size:12px;align-self:stretch;display:flex;align-items:center}
+.traffic-context{grid-column:1 / -1;font-size:11px;text-align:center;padding:8px 14px;color:#d2e1e7;background:#ffffff0a;line-height:1.4}
+#adas-state{grid-column:1 / -1;border-radius:0;text-align:center;white-space:normal;font-size:12px;padding:9px 14px}
+#adas-state[hidden]{display:none}.turn-indicators[data-parked="true"]>#indicator-left,.turn-indicators[data-parked="true"]>#indicator-right{visibility:hidden}
+.city-mode #safety-banner{display:none}.city-mode .drive-hud{top:auto;bottom:86px;left:20px;background:#ffffffdc;border:1px solid #dde5e8;border-radius:10px;padding:8px 14px;max-width:240px}.city-mode .drive-hud b{font-size:42px;letter-spacing:-2px}.city-mode .drive-hud small{display:none}.city-mode .drive-hud>span{display:block;margin-top:5px;line-height:1.4}
+.city-mode .map-label{top:auto;bottom:54px}.city-mode .map-help{bottom:34px}.city-mode .map-legend{bottom:12px}
+.scene-panel:fullscreen,.scene-panel.expanded{width:100vw;height:100dvh;max-height:100dvh;margin:0;border:0;border-radius:0;display:flex;flex-direction:column;background:#f1f3f5;overflow:hidden}
+.scene-panel.expanded{position:fixed;inset:0;z-index:9999}.scene-panel:fullscreen>.canvas-wrap,.scene-panel.expanded>.canvas-wrap{flex:1;min-height:0!important;height:0}.scene-panel:fullscreen>.panel-heading,.scene-panel.expanded>.panel-heading{padding:10px 18px;flex-shrink:0}.scene-panel:fullscreen>.scene-toolbar,.scene-panel.expanded>.scene-toolbar{padding:7px 18px;flex-shrink:0}.scene-panel:fullscreen>.transport,.scene-panel.expanded>.transport{padding:8px 18px;flex-shrink:0}.scene-panel:fullscreen>.driving-decisions,.scene-panel.expanded>.driving-decisions{display:none}
+@media(max-width:650px){.driver-alerts{top:12px;grid-template-columns:1fr;max-width:calc(100% - 24px);min-width:260px}.next-signal{justify-content:center;padding:7px 12px}.turn-indicators{padding:6px 12px}.traffic-context{padding:6px 12px}.city-mode .drive-hud{bottom:72px;left:12px}.city-mode .drive-hud b{font-size:32px}}
+
+.scene-panel>.panel-heading{flex-wrap:wrap;gap:10px}.scene-panel>.panel-heading .view-buttons{display:flex;flex-wrap:wrap;gap:5px}
+
+.parking-choice{margin-top:16px;padding:14px;background:#edf5f5;border:1px solid #cfdfdf;border-radius:10px}.parking-choice-title{font-size:10px;letter-spacing:1px;font-weight:700;color:#254a59}.parking-choice-title span{float:right;letter-spacing:0;font-weight:400}.parking-slots{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:7px;margin-top:10px}.parking-slot{border:1px solid #90b9b2;border-radius:6px;background:#e5f9f0;color:#226b57;padding:8px 3px;cursor:pointer;font-weight:700}.parking-slot small{display:block;font-size:9px;font-weight:400;margin-top:4px}.parking-slot.occupied{background:#e2e7ea;color:#8a969d;border-color:#cdd6da;cursor:not-allowed}.parking-slot.selected{background:#147f6a;border-color:#147f6a;color:white}.parking-choice p{margin:10px 0 0;font-size:10px;color:#56727f}.parking-console{position:absolute;bottom:42px;right:18px;width:310px;max-width:44%;background:#102330f5;color:#ecf7fc;border:1px solid #57798766;border-radius:14px;overflow:hidden;box-shadow:0 10px 35px #0e253750;z-index:6}.parking-title{display:flex;align-items:center;gap:8px;padding:12px 14px}.parking-title span{font-size:8px;color:#6bd6bc;letter-spacing:1px;white-space:nowrap}.parking-title b{font-size:11px;font-weight:500;flex:1}.parking-gear{font-size:22px;color:#f6fcff}.parking-map{display:block;width:100%;max-height:155px}.parking-map [data-parking-slot]{cursor:pointer}.parking-phase{padding:10px 14px;font-size:12px;text-align:center;color:#cce1eb}.parking-progress{height:3px;background:#294654}.parking-progress i{display:block;height:100%;background:#56d9b4;transition:width .3s}.parking-console[data-stage="parked"]{border-color:#51d6b0;animation:park-complete .9s ease-out}.parking-console[data-stage="parked"] .parking-title span{color:#7ff3c6}.parking-console[hidden],.parking-choice[hidden]{display:none}
+@keyframes park-complete{0%{box-shadow:0 0 0 0 #44dfac99;transform:scale(.97)}60%{box-shadow:0 0 0 18px #44dfac00;transform:scale(1.01)}100%{box-shadow:0 0 0 28px #44dfac00;transform:scale(1)}}
+@media(max-width:650px){.parking-slots{grid-template-columns:repeat(4,1fr)}.parking-console{right:10px;bottom:40px;width:230px;max-width:52%}.parking-title{padding:8px;flex-wrap:wrap}.parking-title span{font-size:7px}.parking-title b{font-size:10px}.parking-phase{font-size:10px;padding:7px}.parking-map{max-height:105px}}
+
+.scene-panel:fullscreen .transport,.scene-panel.expanded .transport{display:flex;flex-wrap:nowrap;align-items:center;gap:16px}.scene-panel:fullscreen .transport-buttons,.scene-panel.expanded .transport-buttons{display:flex;gap:8px;width:auto;flex:0 1 auto}.scene-panel:fullscreen .transport-buttons .button,.scene-panel.expanded .transport-buttons .button{flex:none;min-width:100px;padding:8px 18px}.scene-panel:fullscreen .transport-speed,.scene-panel.expanded .transport-speed{margin-left:auto}.scene-panel:fullscreen .replay-bar,.scene-panel.expanded .replay-bar{padding:6px 18px;min-height:38px;flex-shrink:0}
+@media(max-width:650px){.scene-panel:fullscreen .transport,.scene-panel.expanded .transport{flex-wrap:wrap;gap:6px}.scene-panel:fullscreen .transport-buttons .button,.scene-panel.expanded .transport-buttons .button{min-width:0;padding:6px 10px}}
+.parking-console[data-stage="parked"]{width:min(430px,calc(100% - 24px));max-height:72vh;overflow:auto;background:#152b3a}
+.parking-showroom{margin-top:12px;background:#eef3f8;border-radius:12px;overflow:hidden;color:#19334f}
+.parking-showroom canvas{display:block;width:100%;height:230px}
+.parking-showroom p{font-size:11px;text-align:center;margin:8px 0 12px;color:#54718c}
+.car-controls{display:flex;justify-content:center;gap:7px;padding:0 8px}
+.car-controls button{padding:7px 10px;border:1px solid #c3d3e0;background:white;border-radius:6px;color:#244461;cursor:pointer;font-size:11px}
+.car-controls button[aria-pressed="true"]{background:#1267de;color:white;border-color:#1267de}
+.parked-bays summary{cursor:pointer;font-size:11px;margin:10px 0;color:#afd3e5}
+@media(max-width:700px){.parking-showroom canvas{height:180px}.parking-console[data-stage="parked"]{max-height:60vh;width:310px}}
+.parking-window-controls{display:flex;gap:4px;margin-left:8px}
+.parking-window-controls button{width:26px;height:26px;border:1px solid #4b697c;border-radius:5px;background:#243f50;color:#eef6fa;font-size:18px;cursor:pointer;line-height:1}
+.parking-console.parking-minimized{width:auto!important;max-width:calc(100% - 24px);padding-bottom:8px}
+.parking-minimized>:not(.parking-title){display:none!important}
+.parking-console.parking-closed{display:none!important}
+.parking-restore{position:absolute;right:18px;bottom:45px;z-index:15;border:1px solid #43bda5;background:#163444;color:#eafff8;border-radius:8px;padding:11px 16px;cursor:pointer}
+.parking-restore[hidden]{display:none}
+
+/* Reachability colors match the measured-state overlays. */
+.feasible-key{background:#8bd3aa!important}
+
+.hazard-notifications{position:absolute;right:12px;top:12px;z-index:35;width:min(280px,calc(100vw - 36px));max-height:150px;overflow:auto;padding:12px 14px;background:#fff1f2f5;border:1px solid #fecdd3;border-radius:12px;color:#881337;box-shadow:0 4px 18px #172b3a16;pointer-events:none;font-size:12px;line-height:1.5}
+.hazard-notifications[hidden]{display:none}.hazard-notifications strong{display:block;margin-bottom:4px}
+#toast{left:auto!important;right:18px!important;top:24px!important;bottom:auto!important;transform:none!important;max-width:280px}
+
+/* Hazard text is consolidated in the right-corner panel. */
+.driver-alerts #adas-state{display:none}

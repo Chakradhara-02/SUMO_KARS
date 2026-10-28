@@ -1,0 +1,502 @@
+[
+  {
+    "path": "main.py",
+    "before": "e4bd78337be75aea28b8393bc77708144e6cccf34f6ce1c18ffab60617b050d1",
+    "after": "b4a5153ddbab95d5e7a3ba4937c807effe0852cecf83ec8f1c749863e95d21e2"
+  },
+  {
+    "path": "README.md",
+    "before": "7c8d605a38b3671bd38557eec2a4b33e5e04e94addb197f17e2ffa6b8015cee0",
+    "after": "aad444786b22508eafc0d3601a2a53c8af788f85c80d5485d4c68e11b2c321c4"
+  },
+  {
+    "path": "START_HERE.md",
+    "before": null,
+    "after": "8a211921a2bc78c12097ed0d9a30eabe4d5f2e776081d97b435e027342b5005a"
+  },
+  {
+    "path": "Start_City.cmd",
+    "before": null,
+    "after": "98cb709d0937be60c58ce204c40a493108e15c25f03f9346d2d3429112b48b5b"
+  },
+  {
+    "path": "launch_city.py",
+    "before": null,
+    "after": "e6bc2447fc30cb4ff8453d23e2f40c7e0089ef80b209135f7747d1d41aabb804"
+  },
+  {
+    "path": "apply_to_git.py",
+    "before": null,
+    "after": "f65b9b6627c63de5cb2f1d704c3e38373766ebf742c51e1a140af4085a863a26"
+  },
+  {
+    "path": "kars/city.py",
+    "before": "99419def55d32c5c1b9f986827fc297d6cee90d253ea1a8cbe042e51ba7efec4",
+    "after": "6c10f6ddef811eef60d463eacb97bb630d67fc94eb8c8922a08dee6de6a9fcf2"
+  },
+  {
+    "path": "kars/city_infrastructure.py",
+    "before": null,
+    "after": "e78e785d6ee7ed6ae24c889b30b39e000934ccc2bc992c3d6dbbd507ccc02789"
+  },
+  {
+    "path": "kars/city_reachability.py",
+    "before": "d642796582cdd93ab7b5f2d5292e0890199d00940c67f24bccece9b1580a2dc5",
+    "after": "d238ffd033c49f21aaeacf373470e738cfe81ef35be4e46d88f1970bac905fcb"
+  },
+  {
+    "path": "kars/city_routing.py",
+    "before": "ea308319955d83ae726e2662d5d403b3027a267c37eccb20b5c3742280677cb5",
+    "after": "3571736b22a57482f838ad2da16025e1a9856c20ac4166f998678c5044d3b759"
+  },
+  {
+    "path": "kars/console.py",
+    "before": "a1aac8f3d811d971d123661fdcc42c8f17978cecdfe3d2cea1225767f78c6526",
+    "after": "208ed8869dce37f3b8e28f4b97e31a82a17e445684b57aab51aa2c28b768666a"
+  },
+  {
+    "path": "kars/models.py",
+    "before": "b688e96cc2b89ad1b2d9ce5ced241797df566ad28e21403c2e920f2461245ee0",
+    "after": "3ea2534a6c884a1c07f5428ed2cc1055ead5293cc59cbba44785326d70229818"
+  },
+  {
+    "path": "kars/parking.py",
+    "before": null,
+    "after": "17c8e0323781d35d28303d1c2028fe33f431a13b8299e1d0a3d0e267e10b4550"
+  },
+  {
+    "path": "kars/scenarios.py",
+    "before": "bfd3d08d32f973536d2c529c89f3962fff375bf484df7880bb96161c32c01a23",
+    "after": "aab5aae8ee92c87ada2efc56d34453bb50676595592a1e8b862d20f289a51717"
+  },
+  {
+    "path": "kars/simulation.py",
+    "before": "e29e83dc9d24c6950bef7c12f629a70de497cfe965d3ff8213a1b593ec4d6b29",
+    "after": "cfe8f31efcea7f5b991f5615ba7e1606c96400808666cc72c23dc49671790418"
+  },
+  {
+    "path": "kars/storage.py",
+    "before": "567ca29907f7facd2bdc3d21a59652c506e65ff35db15245e8e2a65ef1ed1874",
+    "after": "33a8212217df024dcb1ea8176b4faf75ad95ad485a27f2c1249f3afca0c832b6"
+  },
+  {
+    "path": "simulation_ui/app.bundle.js",
+    "before": "8418ae6b5614f4c9dc8cbf689f432f3b62be0a85b3465ece6fc4d52aad565125",
+    "after": "ec257191bb8d257ade47d62d1267b6225801c58ebea6d15a5b8e62a9a89358d8"
+  },
+  {
+    "path": "simulation_ui/app.js",
+    "before": "ec6b8b618d2f9966f3452978a116661a972cfeaf948bffe5c8ed1aa05a6ed654",
+    "after": "851bd2ebc3fb2d4e18804b9a92f969a42fe95c329479747d441eb2cf8bf6653a"
+  },
+  {
+    "path": "simulation_ui/bridge-geometry.js",
+    "before": null,
+    "after": "e8c30668c0aacb1de9b5918d605ec3f18a2fd1a0744ebb9657c84f58d4020e85"
+  },
+  {
+    "path": "simulation_ui/camera-profile.js",
+    "before": null,
+    "after": "6a5843f393642e0620a82e492bf4095bb92c4f2a11fa4c4333de6d2de03ae895"
+  },
+  {
+    "path": "simulation_ui/city-overlays.js",
+    "before": "f943f945ed018a75388d7f06bcba61aa8b14717969ca49e6a47cb1a812680b22",
+    "after": "195445c43a2531630e7f2b54da3496a9bd241c2bf7e23f1904d7e152532eb379"
+  },
+  {
+    "path": "simulation_ui/city-scenery.js",
+    "before": null,
+    "after": "89aa14bc5009424db924fe87a804879f843907c16a30821cf4d9a66b7f88bb27"
+  },
+  {
+    "path": "simulation_ui/driver-assist.js",
+    "before": null,
+    "after": "ac33abd90e51ccecbd14747a58f00ec22467db0fb5f8186c68e733f71542aaaf"
+  },
+  {
+    "path": "simulation_ui/fullscreen.js",
+    "before": null,
+    "after": "1fbf7b8091ff6f5cfa40e6c1b396e9dfc62d19d3a35251e8b7ab3f7feb007a2d"
+  },
+  {
+    "path": "simulation_ui/index.html",
+    "before": "3befa288f3a3efbcabf8d98a74bc8fec91751c56203ddf19d315c1027258e520",
+    "after": "b89b4604a2fac58970fc891881a9d9d1781fc1ad29d8e81bf23c543c11bd01b4"
+  },
+  {
+    "path": "simulation_ui/motion.js",
+    "before": "e501dad17467b3b355c08ce40519fd6ed4cef1f18d15c96455dad5f9046879fb",
+    "after": "340f32a8538abeab336d937ead1f8154e7d46c13fde94ed9bb4866696d85be3f"
+  },
+  {
+    "path": "simulation_ui/parking-showroom.js",
+    "before": null,
+    "after": "4fb5f5ca27246b19ff2cb54bfe37c4a4a1371005d006fcf51c5b766c39be7601"
+  },
+  {
+    "path": "simulation_ui/parking-ui.js",
+    "before": null,
+    "after": "9953215e899d0b8b14731ccad2ee4f8fb9a6a88cb681d9f330474ce1a4162a6e"
+  },
+  {
+    "path": "simulation_ui/road-surface.js",
+    "before": null,
+    "after": "96918b3b6e7140c1162dc365f9d259a18a9d25b3b6603be920303b094353b43c"
+  },
+  {
+    "path": "simulation_ui/roadster-asset.js",
+    "before": null,
+    "after": "92091609d1edeae56693b4eff2b9737419a79a3772c967b9bc497dc1cf52b7f7"
+  },
+  {
+    "path": "simulation_ui/scene3d.js",
+    "before": "46ef1d4122492b015459f125a1e915156966b8e72fcdc2a1590425f5480b79f7",
+    "after": "b32bcaf0ef24b41d0ca7f8a36a0f876c2f2c3619497f21e05ba68055d9558758"
+  },
+  {
+    "path": "simulation_ui/signal-hud.js",
+    "before": null,
+    "after": "dd1deb721dc406da215fed2916b1e4e449207a0c711da7cf9e02e6b96456df81"
+  },
+  {
+    "path": "simulation_ui/signal-layout.js",
+    "before": "6472e99ad3ecdd3ea81b9b97fda30879ea11bf7a1abe643a452bfc5e494ec7b1",
+    "after": "e72384c5ede9b8f60b7e613841d6bd3931d66a9e1f3942e3b4f8044612fe3475"
+  },
+  {
+    "path": "simulation_ui/style.css",
+    "before": "ba45040eba5b975b3143cd3b33feb9fa1f2170efb963dab4e0e6ea5151c1ebd7",
+    "after": "d76022ce09188d5be2442b84338a017274968831fb4f42efeb557591f592f0db"
+  },
+  {
+    "path": "simulation_ui/traffic-lod.js",
+    "before": null,
+    "after": "d176bec3782c83ff8064c797d15ad2eccb4f8d17b9829cc71b31fa38e5f3d7d3"
+  },
+  {
+    "path": "simulation_ui/vehicle-model.js",
+    "before": null,
+    "after": "c482f938fd50e159bb8d9c7e6ea85178640c2dda5e74be3684cfad045f4e8baf"
+  },
+  {
+    "path": "simulation_ui/vehicle-wheels.js",
+    "before": null,
+    "after": "41d1ea21701d2c19afd8c1f3d38773b04b0296d7f5ab8790dda57baaaede2fca"
+  },
+  {
+    "path": "simulation_ui/assets/roadster-drive.glb",
+    "before": null,
+    "after": "abceddd50242b59f105e893a2f257f1b50e47e074862c7f2467249746cc0a3d3"
+  },
+  {
+    "path": "simulation_ui/assets/roadster-info.json",
+    "before": null,
+    "after": "231fd4cf679f4b29febb1af8e1ea64e6eae6ddfdea517b375523de2e326ec7c0"
+  },
+  {
+    "path": "simulation_ui/assets/roadster-showroom.glb",
+    "before": null,
+    "after": "e483539e9ef1a177eedf48f561d4c6b34cd5fe3793fe1c3880bc9b2f14a652a6"
+  },
+  {
+    "path": "simulation_ui/vendor/BufferGeometryUtils.js",
+    "before": null,
+    "after": "b3c8012ea953d4e03725969e0bb3ff5f4e4e9c5ad9cdf8c64d8b8986cf6b4af0"
+  },
+  {
+    "path": "simulation_ui/vendor/GLTFLoader.js",
+    "before": null,
+    "after": "a180360f36425f0ece54746266dad8207fd0d1c01614734c41efde49e3a25622"
+  },
+  {
+    "path": "simulation_ui/vendor/SkeletonUtils.js",
+    "before": null,
+    "after": "d0d70baa2ec7f1577edcfefa3c8ec493dc5a0f99523da24ab078fec591c0325d"
+  },
+  {
+    "path": "sumo/network/road.net.xml",
+    "before": "59500fb3aed4e6aaede30bfcad9a8ac5d01309c4c0c981d725ffea97934dcb81",
+    "after": "5534b3a9311ec7efad39213cf79977e2ebaf9d5e39611aa578cf8974eb5a3202"
+  },
+  {
+    "path": "sumo/network/city/metro.edges.xml",
+    "before": "4b086d93aacdcd1d5fee251d67cd3a39b4bb7214511d64f8ec60818038a925b4",
+    "after": "358416c6a382fca5db05c8c032ff4c09713d055945854938f0cba84559369cf7"
+  },
+  {
+    "path": "sumo/network/city/metro.nodes.xml",
+    "before": "20823256945df7c007ad0fd485865bf7bb2190bad6db098d5a6b7dd727f66a3e",
+    "after": "d482d6cacd202614df7ec2eacb3d1e2f17e68c42d0f9cc64e4aab9602fb9d21f"
+  },
+  {
+    "path": "sumo/network/city/metro_bridges_v7.net.xml",
+    "before": null,
+    "after": "7c85ef7a94fb09f5e6f6c2383df1cf1827c079e1f10930db51a5cc1016965345"
+  },
+  {
+    "path": "sumo/network/city/metro_flow_v9.net.xml",
+    "before": null,
+    "after": "def0f93bb0e62555b9964cdc37ed6f1782d59acdf625d7cacf841f743b291576"
+  },
+  {
+    "path": "sumo/network/city/metro_parking_v8.net.xml",
+    "before": null,
+    "after": "d22cb872d99b2fdc8a2d618aca3db6dc1eeed54057008b8f70ed7fa51f0b726c"
+  },
+  {
+    "path": "sumo/network/city/metro_protected_v6.net.xml",
+    "before": null,
+    "after": "79727b49d01de98b50cb99ce8233f533901c89a6113b7c21aed6493bb3e0686a"
+  },
+  {
+    "path": "sumo/network/city/metro_signals_v5.net.xml",
+    "before": null,
+    "after": "0773828c76a73840cf929c6de2e8e49cd961042181b8941bc9db5a695fb2ba36"
+  },
+  {
+    "path": "sumo/network/city/metro_straight_v4.net.xml",
+    "before": null,
+    "after": "6a1f866a1ec98e65cebbf54776bda8bb2458bda92d7bb7b074e0192e84231d0a"
+  },
+  {
+    "path": "sumo/network/city/metro_v2.net.xml",
+    "before": "df1319a32d4af2b446142fe159fef71e8e27e89d6e7cf19d7672a8c5b5fd241e",
+    "after": "75e17849b7ee6b36d4b5435cbffb0a81a4bd8ada63a9a9e837e648bb13a10bea"
+  },
+  {
+    "path": "sumo/network/city/metro_v3.net.xml",
+    "before": null,
+    "after": "ebd1d3107bff3a56beb7677ba5cb46a559b61528be021dfb3571a9466d2515ef"
+  },
+  {
+    "path": "tests/bridge_geometry.test.mjs",
+    "before": null,
+    "after": "534ab78b5bb3b16945d36af4bbaf2923d7e1ea1dbaf901aa11747a20db35f94b"
+  },
+  {
+    "path": "tests/camera_lod.test.mjs",
+    "before": null,
+    "after": "6261412336a450afdd402338a9ec593f02a6e401932a0cafe0bff8bfdc167953"
+  },
+  {
+    "path": "tests/city_overlays.test.mjs",
+    "before": "22878aeb18c5a666d10fdabab330894620c12d94b20b4b7019b6f2cd4abb7ba0",
+    "after": "04f3e261006ecdf834e438aa63d4951ff4352e49d47092721e525b7bccf9be56"
+  },
+  {
+    "path": "tests/driver_ux.test.mjs",
+    "before": null,
+    "after": "2ee498f6541f692d9b2cb472fca556fd320b8923ae79f6a08320f9ba9450fb93"
+  },
+  {
+    "path": "tests/fullscreen.test.mjs",
+    "before": null,
+    "after": "11db53284338a6d1cf01b0c8e754182e304a4fd6579f496da7ba4a86655e3d78"
+  },
+  {
+    "path": "tests/motion.test.mjs",
+    "before": "b15267b70e52b05d67c4490cfa3f173e5524390c9860697ac94fec2028fc18c6",
+    "after": "d76028f2a4551765aa3113733f36f028f71b689b1419c5c6b601c52913e0e617"
+  },
+  {
+    "path": "tests/roadster_motion.test.mjs",
+    "before": null,
+    "after": "3ee9d51478049e11dec6f36b5f7df18b2a6edcab27885715bd09902fe8788658"
+  },
+  {
+    "path": "tests/signal_hud.test.mjs",
+    "before": null,
+    "after": "6762744aa6971709411d9cfc4e500b8611effe1c458f971e74b5d472e93ba8a0"
+  },
+  {
+    "path": "tests/signal_layout.test.mjs",
+    "before": "cee4e833bf11f589e3981a10b1106fbe3b6b57a3e016153899fe90905f115868",
+    "after": "7da8a62c317852027aa32e72c6020a8d5274a794991c9a2b07a15fd018f90c8e"
+  },
+  {
+    "path": "tests/test_city.py",
+    "before": "b363d08585d054224ddda3e8e648cabf281a7f7de7f3a9db35cbf6eb3f52dba5",
+    "after": "63f9936decd07e19d09661c248212a06264dfff13295e9e962add52060c55ddd"
+  },
+  {
+    "path": "tests/test_city_infrastructure.py",
+    "before": null,
+    "after": "e61b940c62d4dbc96e9e5789fa74cd6c5010cdf62ed46801b7d6ca514b5f4510"
+  },
+  {
+    "path": "tests/test_city_reachability.py",
+    "before": "f3910f011f5fb6c55048cdde94c846307fcd978cf5e26a5d271edeeb6d6f45ae",
+    "after": "a1d77ad181d207f44a8f5fa7fd786e46694afb399d7461249ba8a25b6ede12c8"
+  },
+  {
+    "path": "tests/test_metro_routes.py",
+    "before": "f7c2acfb015bbf0f0d45e2aedcac4f3296d15229de99a5862e55ab13e43d3e1b",
+    "after": "14e9b81e56b9d44e63359f9e47b14d80f4adfd1bb8ab965f5ebce479616525f2"
+  },
+  {
+    "path": "tests/test_parking.py",
+    "before": null,
+    "after": "f0a101e1e49346d57504f72b585606f7e0690c7736f895c7cf6f9f8881f3c2d8"
+  },
+  {
+    "path": "tests/test_roadster_asset.py",
+    "before": null,
+    "after": "d78f0f262384bc3faa759bdb74ad643450fd97e69e287c7f91ebfcc476a62cfb"
+  },
+  {
+    "path": "tests/test_snapshot_retries.py",
+    "before": null,
+    "after": "af841df2ce304aad8c0701288338410aec59ace21213fa2e47180c17e244131d"
+  },
+  {
+    "path": "tests/test_straight_city.py",
+    "before": null,
+    "after": "93aa97b2968aeedc0b568f1ceb2f7d9f499564836a7c56cd9dbb79e0d1ab0fb9"
+  },
+  {
+    "path": "docs/ROADSTER_ASSET.md",
+    "before": null,
+    "after": "c12d6510ecca6186e5e88b4e9e4dfea74c0990b2a1b7a0051e237de26a3b9bc5"
+  },
+  {
+    "path": "docs/VALIDATION_V9.json",
+    "before": null,
+    "after": "3048186792f151caaad0a0b6f2220101e707701c568df24d60ceb59260da11bc"
+  },
+  {
+    "path": "docs/VALIDATION_V10.json",
+    "before": null,
+    "after": "f4390904fcea3dcf4c2e6ca2fb423e7d5dc86dcc7c7468656d075a4616a70953"
+  },
+  {
+    "path": "docs/Straight_City_Overview.png",
+    "before": null,
+    "after": "47eb3878191a28ddfc7b0d09bd6664e5da667b34d6c45de63b2605bf9d716e80"
+  },
+  {
+    "path": "docs/Parking_Roadster_V10.png",
+    "before": null,
+    "after": "119482414cc0f14fb08e86a9123db8422271318c9aaeed9aff8748c5e16d67cd"
+  },
+  {
+    "path": "docs/Road_Roadster_V10.png",
+    "before": null,
+    "after": "6c18d09fcebb304e5cac7073bff7dc9ee0c030244e784cb545be2279c8006b94"
+  },
+  {
+    "path": "docs/Map_Roadster_V10.png",
+    "before": null,
+    "after": "f5fa1f1cb83b0a377557c6fed596ee310c8b8d09a53318ddf7cf22fa388ecb8e"
+  },
+  {
+    "path": "simulation_ui/local-reachability.js",
+    "before": null,
+    "after": "840f6f2624c183f283c827c6b8fb54603192cad745c5d5457850afb8f79d9b27"
+  },
+  {
+    "path": "tests/local_reachability.test.mjs",
+    "before": null,
+    "after": "84b34a789c2295eb3d6cc172e00c4f8d814702770e437290e5576419381e2570"
+  },
+  {
+    "path": "docs/REACHABILITY_UPDATE.md",
+    "before": null,
+    "after": "6936130573aa4b81778c3fac52a167f660cffe22faf3736cd9a3b3d245a7c588"
+  },
+  {
+    "path": "simulation_ui/offline-reachability.js",
+    "before": null,
+    "after": "a3748b817e58439916a53e6694c2548eac77f172ebf547eb7ba8e6252607d4a9"
+  },
+  {
+    "path": "simulation_ui/offline-reachability.json",
+    "before": null,
+    "after": "e6b8915c8af31e0a01562d334848cb39935d9cf5a71541eb4890fdbc8d8fbdda"
+  },
+  {
+    "path": "tests/offline_reachability.test.mjs",
+    "before": null,
+    "after": "5a7ccd36c2b76aa54236cc782fd5b8c15b16d62fc498135d322c808cb14d3b8d"
+  },
+  {
+    "path": "tools/build_offline_reachability.py",
+    "before": null,
+    "after": "8b98a6c636ea3ff18015bf74f8ef909dbc24573fca00dd1fa254c6a2c5e54ae9"
+  },
+  {
+    "path": "simulation_ui/reachability-constraints.js",
+    "before": null,
+    "after": "b4432fd8bc386bd150d575763487903f2d7585c35d12945e39b650291ff327b3"
+  },
+  {
+    "path": "tests/reachability_constraints.test.mjs",
+    "before": null,
+    "after": "b7ff7f7451df347a2e21250a532a56bcbcbc9fa5ab283ac5106fa32068d5ed92"
+  },
+  {
+    "path": "simulation_ui/reachability.worker.js",
+    "before": null,
+    "after": "946bd2c32281d33c5f347d6137fbe30e8a8d2ac8cc2133bc89bb2f4450782d9d"
+  },
+  {
+    "path": "simulation_ui/reachability.worker.bundle.js",
+    "before": null,
+    "after": "f9b01a1f6a51f81f929f8c1d0e759c6463ea29f64f19b5342402c6c947f373f4"
+  },
+  {
+    "path": "simulation_ui/reachability-runtime.js",
+    "before": null,
+    "after": "a750169a20e5c31610667fe2db4ed1632b1fe66200462d16b1ca3e04cb5ac9bc"
+  },
+  {
+    "path": "simulation_ui/frame-quality.js",
+    "before": null,
+    "after": "6f7f1cff0329aa099284488ceb99ca6ec7e8c0abff54b7988efb39b53eb9bc16"
+  },
+  {
+    "path": "simulation_ui/static-batches.js",
+    "before": null,
+    "after": "bc94d2e5e6b3917478bbb0a9ebba2edff374bd83c65fddddf2d4bac4be4aeeaf"
+  },
+  {
+    "path": "tools/build_frontend.py",
+    "before": null,
+    "after": "a9c874c494e4c0ecb1026621ca600c04dde8822a44cecca9cffaacbd19a73eaa"
+  },
+  {
+    "path": "tools/benchmark_reachability.mjs",
+    "before": null,
+    "after": "65ea57a1b2a51957afe2b12da337d4a81400d2d4802b2b96716a5516491024a7"
+  },
+  {
+    "path": "tests/reachability_runtime.test.mjs",
+    "before": null,
+    "after": "92130acef3168cc782560799acf2c83f21a9ecad30145b387b3f7b796314f565"
+  },
+  {
+    "path": "tests/frame_quality.test.mjs",
+    "before": null,
+    "after": "78350f74af63cfad6e77f882f179c0e9adc9f0ff4de0d39bbefe1fbb020d5375"
+  },
+  {
+    "path": "tests/static_batches.test.mjs",
+    "before": null,
+    "after": "56a69680b1b78dbec8e68551d531c7201c14089f7db5e5b4773a0136ecc97fdf"
+  },
+  {
+    "path": "docs/PERFORMANCE.md",
+    "before": null,
+    "after": "271a67280d02288e6305cd1a4d42ceb924b17a332884ae464753e38a875bfbe1"
+  },
+  {
+    "path": "simulation_ui/reachability-worker-factory.js",
+    "before": null,
+    "after": "96c3dd4499b25fc793a37fceb5646f7bf5059cf4687d0a7db8efb533492cf848"
+  },
+  {
+    "path": "tools/verify_local_envelope.py",
+    "before": null,
+    "after": "c5824c4fb926105e5ca5b6c5a1da47c98504853556150f83462df5e0dd8bf7b8"
+  }
+]
